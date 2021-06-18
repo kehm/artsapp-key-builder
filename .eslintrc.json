@@ -1,0 +1,38 @@
+{
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "extends": [
+        "plugin:react/recommended",
+        "airbnb"
+    ],
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": 12,
+        "sourceType": "module"
+    },
+    "plugins": [
+        "react"
+    ],
+    "rules": {
+        "indent": "off",
+        "quote-props": "off",
+        "react/prop-types" : "off",
+        "react/jsx-indent": "off",
+        "react/jsx-indent-props": "off",
+        "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+        "react/jsx-props-no-spreading": "off",
+        "no-unused-vars": "warn",
+        "no-shadow": "warn",
+        "no-param-reassign": "warn",
+        "camelcase": "warn",
+        "no-empty": "warn",
+        "no-nested-ternary": "warn",
+        "prefer-destructuring": "warn",
+        "no-unneeded-ternary": "warn",
+        "react/no-array-index-key": "warn"
+    }
+}
