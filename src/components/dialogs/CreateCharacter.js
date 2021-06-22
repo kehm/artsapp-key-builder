@@ -9,6 +9,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import { makeStyles } from '@material-ui/core/styles';
 import LanguageContext from '../../context/LanguageContext';
 import { createCharacter } from '../../utils/api/create';
 import RichEditor from '../components/inputs/RichEditor';
@@ -27,12 +28,20 @@ import LanguageBar from '../components/LanguageBar';
 import CreateState from './CreateState';
 import { isValid } from '../../utils/character';
 
+// Set editor height
+const useStyles = makeStyles(() => ({
+    editor: {
+        height: '8.9rem',
+    },
+}));
+
 /**
  * Render create character dialog
  */
 const CreateCharacter = ({
     openDialog, revision, id, languages, onClose, onCreated, onRemove,
 }) => {
+    const classes = useStyles();
     const { language } = useContext(LanguageContext);
     const [defaultFormValues, setDefaultFormValues] = useState({
         titleNo: '',
@@ -303,19 +312,23 @@ const CreateCharacter = ({
                 id="descriptionNo"
                 ref={editorRef}
                 hidden={tab === 1}
+                size="small"
                 defaultValue={formValues.descriptionNo}
                 label={`${language.dictionary.labelDescription} (${language.dictionary.norwegianShort})...`}
                 labelMaxLength={language.dictionary.maxLengthEditor}
                 onSave={(data) => setFormValues({ ...formValues, descriptionNo: data })}
+                editorClass={classes.editor}
             />
             <RichEditor
                 id="descriptionEn"
                 ref={editorRef}
                 hidden={tab === 0}
+                size="small"
                 defaultValue={formValues.descriptionEn}
                 label={`${language.dictionary.labelDescription} (${language.dictionary.englishShort})...`}
                 labelMaxLength={language.dictionary.maxLengthEditor}
                 onSave={(data) => setFormValues({ ...formValues, descriptionEn: data })}
+                editorClass={classes.editor}
             />
             <hr className="mb-6" />
             <FileDrop

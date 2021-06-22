@@ -238,7 +238,7 @@ const Key = () => {
                     <span className="ml-4">
                         <Button
                             variant="contained"
-                            color="secondary"
+                            color="primary"
                             size="medium"
                             endIcon={<EditOutlined />}
                             onClick={() => history.push(`/edit/${keyId}`)}

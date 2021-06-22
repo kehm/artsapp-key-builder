@@ -69,12 +69,11 @@ const materialTheme = createMuiTheme({
         MUIRichTextEditor: {
             root: {
                 overflow: 'hidden',
-
             },
             editor: {
                 paddingLeft: '0.5rem',
                 overflow: 'auto',
-                height: '265px',
+                height: '16.8rem',
             },
             toolbar: {
                 paddingBottom: '0.5rem',

@@ -60,7 +60,7 @@ const KeyInfoForm = ({
                 existingFiles={formValues.existingFiles}
                 onUpdate={(files) => onUpdate(files, 'files')}
                 onUpdateExisting={(files) => onUpdate(files, 'existingFiles')}
-                onClickOpen={(index, existing) => onOpenMediaDialog({ index, existing })}
+                onClickOpen={(index, existing) => onOpenMediaDialog(index, existing)}
             />
         </>
     );
