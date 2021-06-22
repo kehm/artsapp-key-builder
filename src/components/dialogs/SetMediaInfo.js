@@ -88,6 +88,7 @@ const SetMediaInfo = ({
                 type="url"
                 label={language.dictionary.labelLicenseUrl}
                 variant="outlined"
+                inputProps={{ maxLength: 60 }}
                 fullWidth
                 value={formValues.licenseUrl}
                 onChange={(e) => setFormValues(getInputChange(e, formValues))}

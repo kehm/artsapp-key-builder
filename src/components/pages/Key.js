@@ -119,7 +119,26 @@ const Key = () => {
         const modified = key.updated_at ? formatDate(key.updated_at) : undefined;
         return (
             <div className="mt-6">
-                <h2 className="mb-4">{language.dictionary.keyInfo}</h2>
+                <AppBar position="relative" className="mb-6 mt-10 max-w-2xl" color="default">
+                    <Tabs value={tab} onChange={(e, val) => setTab(val)} aria-label="language tabs">
+                        {languages.langNo && (
+                            <Tab
+                                label={`${language.dictionary.norwegian} (${language.dictionary.norwegianShort})`}
+                                onClick={() => setSelectedLanguage('no')}
+                            />
+                        )}
+                        {languages.langEn && (
+                            <Tab
+                                label={`${language.dictionary.english} (${language.dictionary.englishShort})`}
+                                onClick={() => setSelectedLanguage('en')}
+                            />
+                        )}
+                    </Tabs>
+                </AppBar>
+                <h1 className="font-light">{info && info.title}</h1>
+                <ThumbnailList media={key && key.media} />
+                <div className="max-w-2xl mt-6" dangerouslySetInnerHTML={{ __html: info && info.description }} />
+                <h2 className="mb-4 mt-8">{language.dictionary.keyInfo}</h2>
                 <dl className="mb-8">
                     {modified && modified !== createdAt && (
                         <>
@@ -187,25 +206,6 @@ const Key = () => {
                             </>
                         )}
                 </dl>
-                <ThumbnailList media={key && key.media} />
-                <AppBar position="relative" className="mb-6 mt-10 max-w-2xl" color="default">
-                    <Tabs value={tab} onChange={(e, val) => setTab(val)} aria-label="language tabs">
-                        {languages.langNo && (
-                            <Tab
-                                label={`${language.dictionary.norwegian} (${language.dictionary.norwegianShort})`}
-                                onClick={() => setSelectedLanguage('no')}
-                            />
-                        )}
-                        {languages.langEn && (
-                            <Tab
-                                label={`${language.dictionary.english} (${language.dictionary.englishShort})`}
-                                onClick={() => setSelectedLanguage('en')}
-                            />
-                        )}
-                    </Tabs>
-                </AppBar>
-                <h1 className="font-light">{info && info.title}</h1>
-                <div className="max-w-2xl mt-6" dangerouslySetInnerHTML={{ __html: info && info.description }} />
             </div>
         );
     };
@@ -230,10 +230,10 @@ const Key = () => {
                         color="secondary"
                         size="medium"
                         endIcon={<EditOutlined />}
-                        onClick={() => history.push(`/edit/${keyId}`)}
-                        disabled={key && !key.createdBy && !isPermitted(user, ['EDIT_KEY_INFO'], key.workgroupId || true)}
+                        onClick={() => setOpenDialog(true)}
+                        disabled={key && !key.createdBy && !key.isEditor && !isPermitted(user, ['EDIT_KEY'], key.workgroupId || true)}
                     >
-                        {language.dictionary.btnEditInfo}
+                        {language.dictionary.btnEditKey}
                     </Button>
                     <span className="ml-4">
                         <Button
@@ -241,10 +241,10 @@ const Key = () => {
                             color="secondary"
                             size="medium"
                             endIcon={<EditOutlined />}
-                            onClick={() => setOpenDialog(true)}
-                            disabled={key && !key.createdBy && !key.isEditor && !isPermitted(user, ['EDIT_KEY'], key.workgroupId || true)}
+                            onClick={() => history.push(`/edit/${keyId}`)}
+                            disabled={key && !key.createdBy && !isPermitted(user, ['EDIT_KEY_INFO'], key.workgroupId || true)}
                         >
-                            {language.dictionary.btnEditKey}
+                            {language.dictionary.btnEditInfo}
                         </Button>
                     </span>
                     <span className="ml-4">

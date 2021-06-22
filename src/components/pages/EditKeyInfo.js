@@ -54,6 +54,7 @@ const EditKeyInfo = () => {
         contributors: [],
         publishers: [],
         workgroupId: '',
+        licenseUrl: '',
         files: [],
         existingFiles: [],
     });
@@ -156,6 +157,7 @@ const EditKeyInfo = () => {
                 if (languages.en) values.languages.push('en');
                 if (values.groupId === '') delete values.groupId;
                 if (values.workgroupId === '') delete values.workgroupId;
+                if (values.licenseUrl === '') delete values.licenseUrl;
                 await updateKey(keyId, values);
                 await handleUpdateEntityMedia(keyId, 'key', formValues.files, key.media, formValues.existingFiles);
                 setError(undefined);
@@ -413,6 +415,11 @@ const EditKeyInfo = () => {
         </>
     );
 
+    /**
+     * Render save and delete buttons
+     *
+     * @returns JSX
+     */
     const renderActions = () => (
         <>
             <Button

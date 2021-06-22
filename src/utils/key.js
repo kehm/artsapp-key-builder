@@ -34,6 +34,7 @@ export const getKeyInfoValues = (key, organizations, exValues) => {
         publishers: publishers || [],
         groupId: key.keyGroupId || '',
         workgroupId: key.workgroupId || '',
+        licenseUrl: key.licenseUrl || '',
         existingFiles: getFileArray(key.media),
     };
 };
