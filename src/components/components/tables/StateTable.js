@@ -39,10 +39,18 @@ const StateTable = ({
         let title = '';
         let description = '';
         if (state.title) {
-            title = tab === 0 ? state.title.no : state.title.en;
+            if (tab === 0 && state.title.no) {
+                title = state.title.no;
+            } else if (tab === 1 && state.title.en) {
+                title = state.title.en;
+            }
         }
         if (state.description) {
-            description = tab === 0 ? state.description.no : state.description.en;
+            if (tab === 0 && state.description.no) {
+                description = state.description.no;
+            } else if (tab === 1 && state.description.en) {
+                description = state.description.en;
+            }
         }
         return (
             <>

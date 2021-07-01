@@ -56,7 +56,7 @@ const CharacterCards = ({
             });
         }
         setTaxonCharacters(arr);
-    }, [taxon, characters]);
+    }, [taxon, characters, statements]);
 
     /**
      * Set initial switch positions

@@ -45,9 +45,7 @@ const CreateState = ({
         if (index !== undefined && arr.length > index) {
             if (field === 'description') {
                 if (arr[index].description === undefined) arr[index].description = {};
-                if (tab === 0) {
-                    arr[index].description.no = val.descriptionNo;
-                } else arr[index].description.en = val.descriptionEn;
+                arr[index].description[tab === 0 ? 'no' : 'en'] = val;
             } else if (field === 'title') {
                 arr[index].title[tab === 0 ? 'no' : 'en'] = val;
             }
