@@ -174,6 +174,7 @@ const BuildKey = () => {
                 const revId = await createRevision({
                     keyId: revision.keyId,
                     content: JSON.stringify(content),
+                    media: JSON.stringify(revision.media),
                     note,
                     status,
                 });
@@ -208,6 +209,7 @@ const BuildKey = () => {
     const handleRemove = async (field, id, name) => {
         let valid = true;
         let note;
+        let taxaArr = [...taxa];
         let charactersArr = [...characters];
         let statementsArr = [...statements];
         if (field === 'TAXA') {
@@ -217,12 +219,10 @@ const BuildKey = () => {
                     valid = false;
                     setError(language.dictionary.errorRemoveTaxon);
                 } else {
-                    let arr = [...taxa];
-                    const parentTaxa = findParentTaxa(arr, taxon.id);
-                    if (parentTaxa.length > 0) arr = parentTaxa[0].children;
-                    if (arr) {
-                        const index = arr.findIndex((element) => element.id === taxon.id);
-                        arr = arr.splice(index, 1);
+                    const parentTaxa = findParentTaxa(taxaArr, taxon.id);
+                    if (parentTaxa.length > 0) taxaArr = parentTaxa[0].children;
+                    if (taxaArr) {
+                        taxaArr = taxaArr.filter((element) => element.id !== taxon.id);
                         statementsArr = statementsArr.filter((element) => element.taxonId !== id);
                         note = `Removed taxon ${name}`;
                     } else valid = false;
@@ -236,13 +236,14 @@ const BuildKey = () => {
         }
         if (valid) {
             const content = {
-                taxa,
+                taxa: taxaArr,
                 characters: charactersArr,
                 statements: statementsArr,
             };
             const revId = await createRevision({
                 keyId: revision.keyId,
                 content: JSON.stringify(content),
+                media: JSON.stringify(revision.media),
                 note,
             });
             handleNewRevision(revId);

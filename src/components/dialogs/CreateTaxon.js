@@ -203,7 +203,7 @@ const CreateTaxon = ({
     const handleDelete = async (confirm) => {
         if (confirm) {
             setConfirmDelete(true);
-        } else onRemove(id, defaultFormValues.titleEn);
+        } else onRemove(id, defaultFormValues.scientificName);
     };
 
     /**

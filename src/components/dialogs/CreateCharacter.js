@@ -256,7 +256,7 @@ const CreateCharacter = ({
     const handleDelete = async (confirm) => {
         if (confirm) {
             setConfirmDelete({ open: 'CHARACTER' });
-        } else onRemove(id, defaultFormValues.titleEn);
+        } else onRemove(id, defaultFormValues.titleEn !== '' ? defaultFormValues.titleEn : defaultFormValues.titleNo);
     };
 
     /**
