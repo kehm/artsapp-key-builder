@@ -293,8 +293,7 @@ const BuildKey = () => {
                     {language.dictionary.show}
                 </span>
                 <FormControlLabel value="ALL" control={<Radio />} label={language.dictionary.all} />
-                <FormControlLabel value="EXCLUSIVE" control={<Radio />} label={language.dictionary.exclusive} />
-                <FormControlLabel value="MULTISTATE" control={<Radio />} label={language.dictionary.multistate} />
+                <FormControlLabel value="CATEGORICAL" control={<Radio />} label={language.dictionary.categorical} />
                 <FormControlLabel value="NUMERICAL" control={<Radio />} label={language.dictionary.numerical} />
             </div>
         </RadioGroup>

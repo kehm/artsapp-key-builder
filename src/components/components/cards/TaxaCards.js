@@ -43,7 +43,7 @@ const TaxaCards = ({
         let arr = [...statements];
         if (e.target.checked) {
             let value;
-            if (character.type.toUpperCase() === 'NUMERICAL') {
+            if (character.type && character.type.toUpperCase() === 'NUMERICAL') {
                 value = [parseFloat(character.states.min), parseFloat(character.states.max)];
             } else value = character.states[0].id;
             arr.push({ characterId: character.id, taxonId: e.target.name, value });

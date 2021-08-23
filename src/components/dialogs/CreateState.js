@@ -28,8 +28,7 @@ const CreateState = ({
     const [tab, setTab] = useState(0);
     const [stateError, setStateError] = useState(false);
     const types = [
-        { value: 'EXCLUSIVE', label: language.dictionary.exclusive },
-        { value: 'MULTISTATE', label: language.dictionary.multistate },
+        { value: 'CATEGORICAL', label: language.dictionary.categorical },
         { value: 'NUMERICAL', label: language.dictionary.numerical },
     ];
 
@@ -171,32 +170,30 @@ const CreateState = ({
      * @returns JSX
      */
     const renderTypeSelect = () => (
-        <div className="mb-4">
-            <FormControl variant="outlined" fullWidth>
-                <InputLabel id="type-label" required>
-                    {language.dictionary.labelType}
-                </InputLabel>
-                <Select
-                    className="mb-6"
-                    labelId="type-label"
-                    id="type"
-                    name="type"
-                    value={formValues.type}
-                    variant="outlined"
-                    required
-                    disabled={id !== undefined || formValues.alternatives.length > 0}
-                    label={language.dictionary.labelType}
-                    fullWidth
-                    onChange={(e) => onInputChange(e)}
-                >
-                    {types.map((type) => (
-                        <MenuItem key={type.value} value={type.value}>
-                            {type.label}
-                        </MenuItem>
-                    ))}
-                </Select>
-            </FormControl>
-        </div>
+        <FormControl variant="outlined" fullWidth>
+            <InputLabel id="type-label" required>
+                {language.dictionary.labelType}
+            </InputLabel>
+            <Select
+                className="mb-6"
+                labelId="type-label"
+                id="type"
+                name="type"
+                value={formValues.type}
+                variant="outlined"
+                required
+                disabled={id !== undefined || formValues.alternatives.length > 0}
+                label={language.dictionary.labelType}
+                fullWidth
+                onChange={(e) => onInputChange(e)}
+            >
+                {types.map((type) => (
+                    <MenuItem key={type.value} value={type.value}>
+                        {type.label}
+                    </MenuItem>
+                ))}
+            </Select>
+        </FormControl>
     );
 
     /**
@@ -230,9 +227,7 @@ const CreateState = ({
                 type="button"
                 onClick={() => onSubmit()}
                 disabled={formValues.type === ''
-                    || ((formValues.type === 'EXCLUSIVE'
-                        || formValues.type === 'MULTISTATE')
-                        && formValues.alternatives.length < 2)}
+                    || (formValues.type === 'CATEGORICAL' && formValues.alternatives.length < 2)}
             >
                 {id ? language.dictionary.btnSaveChanges : language.dictionary.btnAdd}
             </Button>
@@ -241,7 +236,6 @@ const CreateState = ({
 
     return (
         <div hidden={hidden}>
-            <p className="mb-8">{language.dictionary.sectionCharacterType}</p>
             {renderTypeSelect()}
             {formValues.type && (
                 <LanguageBar
@@ -251,7 +245,7 @@ const CreateState = ({
                     onTabChange={(val) => setTab(val)}
                 />
             )}
-            {(formValues.type === 'EXCLUSIVE' || formValues.type === 'MULTISTATE') && (
+            {formValues.type === 'CATEGORICAL' && (
                 <StateTable
                     formValues={formValues}
                     tab={tab}

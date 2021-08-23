@@ -127,7 +127,7 @@ export const getCategoricalCharacterInfoValues = (
 ) => new Promise((resolve, reject) => {
     const values = {
         ...exValues,
-        type: character.type ? character.type.toUpperCase() : '',
+        type: 'CATEGORICAL',
         titleNo: character.title && character.title.no ? character.title.no : '',
         titleEn: character.title && character.title.en ? character.title.en : '',
         descriptionNo: character.description ? convertFromHtml(character.description.no) : '',
@@ -172,7 +172,7 @@ export const getNumericalCharacterInfoValues = async (character, exValues, revis
     const state = character.states;
     const values = {
         ...exValues,
-        type: character.type ? character.type.toUpperCase() : '',
+        type: 'NUMERICAL',
         titleNo: character.title && character.title.no ? character.title.no : '',
         titleEn: character.title && character.title.en ? character.title.en : '',
         descriptionNo: character.description ? convertFromHtml(character.description.no) : '',

@@ -79,7 +79,7 @@ const CharacterCards = ({
                 && characters.find((element) => element.id === characterId);
             if (character && character.states) {
                 let value;
-                if (character.type.toUpperCase() === 'NUMERICAL') {
+                if (character.type && character.type.toUpperCase() === 'NUMERICAL') {
                     value = [parseFloat(character.states.min), parseFloat(character.states.max)];
                 } else value = character.states[0].id;
                 arr.push({ taxonId: taxon.id, characterId, value });
@@ -100,34 +100,36 @@ const CharacterCards = ({
      */
     const handleAlternativeCheck = (stateId, character, uncheck) => {
         let arr = [...statements];
-        if (character.type.toUpperCase() === 'EXCLUSIVE') {
-            const obj = arr.find(
-                (element) => element.taxonId === taxon.id && element.characterId === character.id,
-            );
-            if (obj) {
-                obj.value = stateId;
-                setSwitches({ ...switches, [character.id]: 0 });
+        /*
+          if (character.type.toUpperCase() === 'EXCLUSIVE') {
+              const obj = arr.find(
+                  (element) => element.taxonId === taxon.id && element.characterId === character.id,
+              );
+              if (obj) {
+                  obj.value = stateId;
+                  setSwitches({ ...switches, [character.id]: 0 });
+              }
+          } else if (character.type.toUpperCase() === 'MULTISTATE') {
+              */
+        if (uncheck) {
+            if (arr.filter(
+                (element) => element.taxonId === taxon.id
+                    && element.characterId === character.id,
+            ).length > 1) {
+                arr = arr.filter(
+                    (element) => !(element.taxonId === taxon.id
+                        && element.characterId === character.id
+                        && element.value === stateId),
+                );
+                setSwitches({ ...switches, [character.id]: -1 });
             }
-        } else if (character.type.toUpperCase() === 'MULTISTATE') {
-            if (uncheck) {
-                if (arr.filter(
-                    (element) => element.taxonId === taxon.id
-                        && element.characterId === character.id,
-                ).length > 1) {
-                    arr = arr.filter(
-                        (element) => !(element.taxonId === taxon.id
-                            && element.characterId === character.id
-                            && element.value === stateId),
-                    );
-                    setSwitches({ ...switches, [character.id]: -1 });
-                }
-            } else if (character.states.length > arr.filter(
-                (element) => element.taxonId === taxon.id && element.characterId === character.id,
-            ).length) {
-                arr.push({ taxonId: taxon.id, characterId: character.id, value: stateId });
-                setSwitches({ ...switches, [character.id]: 0 });
-            }
+        } else if (character.states.length > arr.filter(
+            (element) => element.taxonId === taxon.id && element.characterId === character.id,
+        ).length) {
+            arr.push({ taxonId: taxon.id, characterId: character.id, value: stateId });
+            setSwitches({ ...switches, [character.id]: 0 });
         }
+        // }
         onStateChange(arr);
     };
 
@@ -296,11 +298,8 @@ const CharacterCards = ({
     const renderCards = () => {
         let arr;
         switch (filter) {
-            case 'EXCLUSIVE':
-                arr = taxonCharacters.filter((character) => character.type === 'exclusive');
-                break;
-            case 'MULTISTATE':
-                arr = taxonCharacters.filter((character) => character.type === 'multistate');
+            case 'CATEGORICAL':
+                arr = taxonCharacters.filter((character) => character.type !== 'numerical');
                 break;
             case 'NUMERICAL':
                 arr = taxonCharacters.filter((character) => character.type === 'numerical');

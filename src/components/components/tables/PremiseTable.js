@@ -64,17 +64,7 @@ const PremiseTable = ({
         const arr = [...premises];
         if (char) {
             const tmp = [];
-            if (char.type === 'exclusive' || char.type === 'multistate') {
-                char.states.forEach((state) => {
-                    tmp.push({
-                        index,
-                        characterId: char.id,
-                        stateId: state.id,
-                        value: true,
-                        condition: selectedNots[index] ? '!=' : '==',
-                    });
-                });
-            } else {
+            if (char.type === 'numerical') {
                 const nots = [...selectedNots];
                 nots[index] = false;
                 setSelectedNots(nots);
@@ -91,6 +81,16 @@ const PremiseTable = ({
                     stateId: char.states.id,
                     value: char.states.max,
                     condition: '<=',
+                });
+            } else {
+                char.states.forEach((state) => {
+                    tmp.push({
+                        index,
+                        characterId: char.id,
+                        stateId: state.id,
+                        value: true,
+                        condition: selectedNots[index] ? '!=' : '==',
+                    });
                 });
             }
             arr[index] = tmp;
@@ -110,17 +110,7 @@ const PremiseTable = ({
         let charStates = char.states;
         if (states.length > 0) charStates = states;
         const tmp = [];
-        if (char.type === 'exclusive' || char.type === 'multistate') {
-            charStates.forEach((state) => {
-                tmp.push({
-                    index,
-                    characterId: char.id,
-                    stateId: state.id,
-                    value: true,
-                    condition: selectedNots[index] ? '!=' : '==',
-                });
-            });
-        } else {
+        if (char.type === 'numerical') {
             tmp.push({
                 index,
                 characterId: char.id,
@@ -134,6 +124,16 @@ const PremiseTable = ({
                 stateId: states.length > 0 ? char.states.id : charStates.id,
                 value: states.length > 0 ? `${charStates[1]}` : charStates.max,
                 condition: '<=',
+            });
+        } else {
+            charStates.forEach((state) => {
+                tmp.push({
+                    index,
+                    characterId: char.id,
+                    stateId: state.id,
+                    value: true,
+                    condition: selectedNots[index] ? '!=' : '==',
+                });
             });
         }
         arr[index] = tmp;
@@ -208,36 +208,6 @@ const PremiseTable = ({
     const renderPremise = (index) => {
         const char = findCharacter(index);
         const type = char && char.states && char.type ? char.type.toUpperCase() : undefined;
-        if (type === 'EXCLUSIVE' || type === 'MULTISTATE') {
-            return (
-                <Autocomplete
-                    multiple
-                    id={`states${index}`}
-                    fullWidth
-                    value={premises[index]
-                        ? char.states.filter((element) => {
-                            const state = premises[index].find(
-                                (obj) => obj.stateId === element.id,
-                            );
-                            if (state) return true;
-                            return false;
-                        }) : []}
-                    onChange={(e, val) => handleStateInput(char, val, index)}
-                    options={char.states || []}
-                    getOptionLabel={(state) => findName(state.title, language.language.split('_')[0]) || language.dictionary.unknown}
-                    noOptionsText={language.dictionary.noAlternatives}
-                    renderTags={(value, getTagProps) => value.map((state, i) => (
-                        <Chip
-                            key={state.id}
-                            variant="outlined"
-                            label={findName(state.title, language.language.split('_')[0]) || language.dictionary.unknown}
-                            {...getTagProps({ i })}
-                        />
-                    ))}
-                    renderInput={(params) => <TextField {...params} label={language.dictionary.headerStates} variant="outlined" />}
-                />
-            );
-        }
         if (type === 'NUMERICAL') {
             let defaultState = [
                 parseFloat(char.states.min),
@@ -269,7 +239,34 @@ const PremiseTable = ({
                 </>
             );
         }
-        return null;
+        return (
+            <Autocomplete
+                multiple
+                id={`states${index}`}
+                fullWidth
+                value={premises[index]
+                    ? char.states.filter((element) => {
+                        const state = premises[index].find(
+                            (obj) => obj.stateId === element.id,
+                        );
+                        if (state) return true;
+                        return false;
+                    }) : []}
+                onChange={(e, val) => handleStateInput(char, val, index)}
+                options={char.states || []}
+                getOptionLabel={(state) => findName(state.title, language.language.split('_')[0]) || language.dictionary.unknown}
+                noOptionsText={language.dictionary.noAlternatives}
+                renderTags={(value, getTagProps) => value.map((state, i) => (
+                    <Chip
+                        key={state.id}
+                        variant="outlined"
+                        label={findName(state.title, language.language.split('_')[0]) || language.dictionary.unknown}
+                        {...getTagProps({ i })}
+                    />
+                ))}
+                renderInput={(params) => <TextField {...params} label={language.dictionary.headerStates} variant="outlined" />}
+            />
+        );
     };
 
     /**

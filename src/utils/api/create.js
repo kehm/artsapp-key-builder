@@ -48,7 +48,7 @@ export const createTaxon = async (data) => {
 /**
  * Create new character for key
  *
- * @param {Object} data keyId, revisionId, title, type and alternatives (EXCLUSIVE and MULTISTATE)
+ * @param {Object} data keyId, revisionId, title, type and alternatives (CATEGORICAL)
  * @returns {Object} Response data
  */
 export const createCharacter = async (data) => {

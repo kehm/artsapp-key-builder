@@ -76,7 +76,7 @@ const PremiseGroupTable = ({
                 <h2 className="text-lg text-yellow-500">{char ? (findName(char.title, language.language.split('_')[0]) || language.dictionary.unknown) : ''}</h2>
                 {premise && Array.isArray(premise) && premise.map((obj, index) => {
                     if (obj) {
-                        if (char && (char.type === 'exclusive' || char.type === 'multistate')) {
+                        if (char && char.type !== 'numerical') {
                             const state = char.states.find((el) => el.id === obj.stateId);
                             return (
                                 <p key={index}>
@@ -89,7 +89,7 @@ const PremiseGroupTable = ({
                         return (
                             <p key={index}>
                                 {obj.condition}
-                            &nbsp;
+                                &nbsp;
                                 {obj.value}
                             </p>
                         );

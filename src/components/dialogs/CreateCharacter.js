@@ -179,7 +179,7 @@ const CreateCharacter = ({
             let characterId = id;
             if (id) {
                 revisionId = await updateCharacter(id, values);
-                if (values.type === 'exclusive' || values.type === 'multistate') {
+                if (values.type !== 'numerical') {
                     await checkAlternatives(values.alternatives.map((element) => element.id));
                 }
             } else {
