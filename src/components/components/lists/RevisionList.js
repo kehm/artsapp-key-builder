@@ -41,10 +41,10 @@ const RevisionList = ({ revisions, selectable, onClickListItem }) => {
             {revisions && revisions.map((revision, index) => (
                 <ListItem
                     key={revision.id}
-                    className="cursor-pointer"
+                    className="cursor-pointer hover:bg-gray-100"
                     onClick={() => handleListItemClick(revision, index)}
                 >
-                    {selectable ? (
+                    {selectable && (
                         <ListItemIcon>
                             <Checkbox
                                 edge="start"
@@ -53,14 +53,7 @@ const RevisionList = ({ revisions, selectable, onClickListItem }) => {
                                 disableRipple
                             />
                         </ListItemIcon>
-                    )
-                        : (
-                            <ListItemAvatar>
-                                <Avatar>
-                                    <ImageIcon />
-                                </Avatar>
-                            </ListItemAvatar>
-                        )}
+                    )}
                     <ListItemText
                         primary={(
                             <p className={`${revision.createdBy ? 'font-bold' : ''} overflow-hidden overflow-ellipsis whitespace-nowrap w-96`}>

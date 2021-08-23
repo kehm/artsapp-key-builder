@@ -19,6 +19,7 @@ import ThumbnailList from '../components/lists/ThumbnailList';
 import UserContext from '../../context/UserContext';
 import MissingPermission from '../components/MissingPermission';
 import isPermitted from '../../utils/is-permitted';
+import TestKey from '../dialogs/TestKey';
 
 /**
  * Render key info page
@@ -33,11 +34,12 @@ const Key = () => {
     const [workgroups, setWorkgroups] = useState(undefined);
     const [error, setError] = useState(undefined);
     const [errorDialog, setErrorDialog] = useState(undefined);
-    const [openDialog, setOpenDialog] = useState(false);
+    const [openEditDialog, setOpenEditDialog] = useState(false);
     const [selectedLanguage, setSelectedLanguage] = useState(undefined);
     const [latestRevision, setLatestRevision] = useState(true);
     const [selectedRevision, setSelectedRevision] = useState(undefined);
-    const [openShareModal, setOpenShareModal] = useState(false);
+    const [openShareDialog, setOpenShareDialog] = useState(false);
+    const [openTestDialog, setOpenTestDialog] = useState(false);
     const [tab, setTab] = useState(0);
     const [languages, setLanguages] = useState({
         langNo: false,
@@ -91,11 +93,11 @@ const Key = () => {
      * Reset error message and latest flag on dialog exit
      */
     useEffect(() => {
-        if (!openDialog) {
+        if (!openEditDialog) {
             setLatestRevision(true);
             setErrorDialog(false);
         }
-    }, [openDialog]);
+    }, [openEditDialog]);
 
     /**
      * Go to edit page
@@ -230,7 +232,7 @@ const Key = () => {
                         color="secondary"
                         size="medium"
                         endIcon={<EditOutlined />}
-                        onClick={() => setOpenDialog(true)}
+                        onClick={() => setOpenEditDialog(true)}
                         disabled={key && !key.createdBy && !key.isEditor && !isPermitted(user, ['EDIT_KEY'], key.workgroupId || true)}
                     >
                         {language.dictionary.btnEditKey}
@@ -253,7 +255,7 @@ const Key = () => {
                             color="primary"
                             size="medium"
                             endIcon={<GroupAddOutlined />}
-                            onClick={() => setOpenShareModal(true)}
+                            onClick={() => setOpenShareDialog(true)}
                             disabled={key && !key.createdBy && !isPermitted(user, ['SHARE_KEY'], key.workgroupId || true)}
                         >
                             {language.dictionary.btnShare}
@@ -265,7 +267,7 @@ const Key = () => {
                             color="primary"
                             size="medium"
                             endIcon={<OpenInNewOutlined />}
-                            disabled
+                            onClick={() => setOpenTestDialog(true)}
                         >
                             {language.dictionary.btnTestKey}
                         </Button>
@@ -285,7 +287,11 @@ const Key = () => {
             {key && renderActionBar()}
             {error && <p className="text-red-600 mt-4">{error}</p>}
             {key && renderKeyDetails()}
-            <Dialog className="text-center" onClose={() => setOpenDialog(false)} open={openDialog}>
+            <Dialog
+                className="text-center"
+                onClose={() => setOpenEditDialog(false)}
+                open={openEditDialog}
+            >
                 <SelectRevision
                     revisions={revisions}
                     selected={selectedRevision}
@@ -293,16 +299,27 @@ const Key = () => {
                     onBuildKey={() => handleBuildKey()}
                     onShowPrevious={() => setLatestRevision(false)}
                     onSelect={(revision) => setSelectedRevision(revision)}
-                    onClose={() => setOpenDialog(false)}
+                    onClose={() => setOpenEditDialog(false)}
                     error={errorDialog}
                 />
             </Dialog>
-            {openShareModal && (
+            {openShareDialog && (
                 <ShareKey
-                    openDialog={openShareModal}
+                    openDialog={openShareDialog}
                     keyId={keyId}
                     workgroup={key ? key.workgroup : undefined}
-                    onClose={() => setOpenShareModal(false)}
+                    onClose={() => setOpenShareDialog(false)}
+                />
+            )}
+            {openTestDialog && (
+                <TestKey
+                    openDialog={openTestDialog}
+                    revisions={revisions}
+                    onSelect={(revisionId) => {
+                        window.open(`${process.env.REACT_APP_PLAYER_URL}/preview/${revisionId}`, '_blank');
+                        setOpenTestDialog(false);
+                    }}
+                    onClose={() => setOpenTestDialog(false)}
                 />
             )}
         </div>

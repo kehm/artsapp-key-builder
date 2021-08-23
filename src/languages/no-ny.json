@@ -262,5 +262,7 @@
     "workgroupAccess": "Brukarar frå arbeidsgruppa ",
     "workgroupHasAccess": " har tilgang til nøkkelen.",
     "noKeysInGroup": "Det er ingen nøklar i denne gruppa.",
-    "noKeysInCollection": "Det er ingen nøklar i denne samlinga."
+    "noKeysInCollection": "Det er ingen nøklar i denne samlinga.",
+    "selectTestRevision": "Vel revisjonen du vil teste. Dette vil ta deg til ArtsApp nøkkelavspillar-applikasjonen.",
+    "headerTestKey": "Test nøkkel"
 }

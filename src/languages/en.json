@@ -262,5 +262,7 @@
     "workgroupAccess": "Users from the workgroup ",
     "workgroupHasAccess": " have access to the key.",
     "noKeysInGroup": "There are no keys in this group.",
-    "noKeysInCollection": "There are no keys in this collection."
+    "noKeysInCollection": "There are no keys in this collection.",
+    "selectTestRevision": "Select the revision that you want to test. This will take you to the ArtsApp Key Player application.",
+    "headerTestKey": "Test key"
 }
