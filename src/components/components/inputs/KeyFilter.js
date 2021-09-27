@@ -11,7 +11,7 @@ const KeyFilter = ({ filter, onChangeFilter }) => {
     const { language } = useContext(LanguageContext);
 
     return (
-        <div className="flex mt-10">
+        <div className="flex mt-4 mb-0 px-2">
             <div className="border border-solid rounded pl-4 py-2 w-80">
                 <span className="font-semibold">
                     {language.dictionary.labelFilterCategory}

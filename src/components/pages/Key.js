@@ -14,7 +14,7 @@ import { getKey, getRevisions, getWorkgroups } from '../../utils/api/get';
 import formatDate from '../../utils/format-date';
 import ShareKey from '../dialogs/ShareKey';
 import SelectRevision from '../dialogs/SelectRevision';
-import BackButton from '../components/BackButton';
+import BackButton from '../components/buttons/BackButton';
 import ThumbnailList from '../components/lists/ThumbnailList';
 import UserContext from '../../context/UserContext';
 import MissingPermission from '../components/MissingPermission';

@@ -14,7 +14,7 @@ import LanguageContext from '../../context/LanguageContext';
 import { createCharacter } from '../../utils/api/create';
 import RichEditor from '../components/inputs/RichEditor';
 import { updateCharacter, updateStatePremises } from '../../utils/api/update';
-import CloseButton from '../components/CloseButton';
+import CloseButton from '../components/buttons/CloseButton';
 import ConfirmDelete from './ConfirmDelete';
 import FileDrop from '../components/inputs/FileDrop';
 import SetMediaInfo from './SetMediaInfo';

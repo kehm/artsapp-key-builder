@@ -10,7 +10,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import LanguageContext from '../../context/LanguageContext';
-import CloseButton from '../components/CloseButton';
+import CloseButton from '../components/buttons/CloseButton';
 import CreatorSelect from '../components/inputs/CreatorSelect';
 import AddCreator from './AddCreator';
 import TextInput from '../components/inputs/TextInput';

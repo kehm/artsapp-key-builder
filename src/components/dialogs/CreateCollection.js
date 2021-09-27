@@ -20,7 +20,7 @@ import { deleteCollection } from '../../utils/api/delete';
 import ConfirmDelete from './ConfirmDelete';
 import FileDrop from '../components/inputs/FileDrop';
 import RichEditor from '../components/inputs/RichEditor';
-import CloseButton from '../components/CloseButton';
+import CloseButton from '../components/buttons/CloseButton';
 import TextInput from '../components/inputs/TextInput';
 import SetMediaInfo from './SetMediaInfo';
 import getInputChange from '../../utils/input-change';

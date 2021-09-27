@@ -10,7 +10,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import LanguageContext from '../../context/LanguageContext';
-import CloseButton from '../components/CloseButton';
+import CloseButton from '../components/buttons/CloseButton';
 import getInputChange from '../../utils/input-change';
 import { addKeyEditor } from '../../utils/api/create';
 import { getKeyEditors } from '../../utils/api/get';

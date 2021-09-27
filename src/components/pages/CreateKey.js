@@ -16,7 +16,7 @@ import CreateKeyGroup from '../dialogs/CreateKeyGroup';
 import CreateCollection from '../dialogs/CreateCollection';
 import CollectionSelect from '../components/inputs/CollectionSelect';
 import KeyGroupSelect from '../components/inputs/KeyGroupSelect';
-import BackButton from '../components/BackButton';
+import BackButton from '../components/buttons/BackButton';
 import RichEditor from '../components/inputs/RichEditor';
 import FileDrop from '../components/inputs/FileDrop';
 import SetMediaInfo from '../dialogs/SetMediaInfo';

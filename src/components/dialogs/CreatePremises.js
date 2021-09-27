@@ -6,7 +6,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 import LanguageContext from '../../context/LanguageContext';
-import CloseButton from '../components/CloseButton';
+import CloseButton from '../components/buttons/CloseButton';
 import { findName } from '../../utils/translation';
 import CreatePremiseGroup from './CreatePremiseGroup';
 import { updateCharacterPremise } from '../../utils/api/update';

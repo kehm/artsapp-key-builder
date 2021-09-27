@@ -7,7 +7,7 @@ import axios from 'axios';
 import { ThemeProvider } from '@material-ui/core/styles';
 import LanguageContext from './context/LanguageContext';
 import { dictionary } from './languages/language';
-import Nav from './components/components/Nav';
+import Nav from './components/nav/Nav';
 import NoMatch from './components/pages/NoMatch';
 import Keys from './components/pages/Keys';
 import SignIn from './components/pages/SignIn';
@@ -47,6 +47,7 @@ const App = () => {
   const userValue = { user, setUser };
   const [authenticated, setAuthenticated] = useState(false);
   const [showProgress, setShowProgress] = useState(true);
+  const [pageTitle, setPageTitle] = useState('undefined');
 
   /**
    * Check for a valid user session
@@ -111,13 +112,20 @@ const App = () => {
    * @param {Object} Component Component to render
    * @param {string} permission Required permission
    */
+  const renderPage = (Component, permission) => (
+    <div className="h-full lg:ml-56 mb-10 md:mb-0 bg-white z-50 text-darkGrey">
+      <Component onSetTitle={(title) => setPageTitle(title)} />
+    </div>
+  );
+
+  /*
   const renderPage = (Component, permission) => {
     if (!authenticated) return null;
     if (user.authenticated) {
       if (!permission || isPermitted(user, [permission])) {
         return (
           <div className="h-full md:ml-56 mb-10 md:mb-0 bg-white z-50 text-darkGrey">
-            <Component />
+            <Component onSetTitle={(title) => setPageTitle(title)} />
           </div>
         );
       }
@@ -125,6 +133,7 @@ const App = () => {
     }
     return <Redirect to="/signin" />;
   };
+  */
 
   return (
     <StrictMode>
@@ -133,7 +142,10 @@ const App = () => {
           <UserContext.Provider value={userValue}>
             <ThemeProvider theme={materialTheme}>
               <ProgressIndicator open={showProgress} />
-              <Nav signOut={() => invalidateSession()} />
+              <Nav
+                title={pageTitle}
+                signOut={() => invalidateSession()}
+              />
               <Switch>
                 <Route path="/signin" exact component={SignIn} />
                 <Route path="/" exact component={() => renderPage(Keys, 'BROWSE_KEYS')} />

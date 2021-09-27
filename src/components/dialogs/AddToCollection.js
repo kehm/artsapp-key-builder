@@ -13,7 +13,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import LanguageContext from '../../context/LanguageContext';
-import CloseButton from '../components/CloseButton';
+import CloseButton from '../components/buttons/CloseButton';
 import { getKeys, getKeysByCollection } from '../../utils/api/get';
 import KeyTitleList from '../components/lists/KeyTitleList';
 import UserContext from '../../context/UserContext';

@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import Dialog from '@material-ui/core/Dialog';
-import CloseButton from '../components/CloseButton';
+import CloseButton from '../components/buttons/CloseButton';
 import LanguageContext from '../../context/LanguageContext';
 
 /**

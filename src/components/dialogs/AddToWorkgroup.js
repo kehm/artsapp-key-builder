@@ -12,7 +12,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import LanguageContext from '../../context/LanguageContext';
 import ConfirmDelete from './ConfirmDelete';
 import UserList from '../components/lists/UserList';
-import CloseButton from '../components/CloseButton';
+import CloseButton from '../components/buttons/CloseButton';
 import getInputChange from '../../utils/input-change';
 import { addUserToWorkgroup } from '../../utils/api/create';
 import { getWorkgroupUsers } from '../../utils/api/get';

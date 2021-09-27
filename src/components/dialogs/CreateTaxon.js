@@ -19,7 +19,7 @@ import { getTaxonSuggestions, getVernacularName } from '../../utils/api/get';
 import SuggestionList from '../components/lists/SuggestionList';
 import RichEditor from '../components/inputs/RichEditor';
 import { updateTaxon } from '../../utils/api/update';
-import CloseButton from '../components/CloseButton';
+import CloseButton from '../components/buttons/CloseButton';
 import ConfirmDelete from './ConfirmDelete';
 import { findTaxon } from '../../utils/taxon';
 import SetMediaInfo from './SetMediaInfo';

@@ -19,7 +19,7 @@ import { getKeyGroup } from '../../utils/api/get';
 import { deleteKeyGroup } from '../../utils/api/delete';
 import ConfirmDelete from './ConfirmDelete';
 import RichEditor from '../components/inputs/RichEditor';
-import CloseButton from '../components/CloseButton';
+import CloseButton from '../components/buttons/CloseButton';
 import FileDrop from '../components/inputs/FileDrop';
 import SetMediaInfo from './SetMediaInfo';
 import UnsavedChanges from './UnsavedChanges';

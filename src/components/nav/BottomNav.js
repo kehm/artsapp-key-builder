@@ -2,14 +2,15 @@ import React, { useState, useContext, useEffect } from 'react';
 import { useHistory } from 'react-router';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
-import LanguageContext from '../../context/LanguageContext';
+import ListAlt from '@material-ui/icons/ListAlt';
+import LibraryBooks from '@material-ui/icons/LibraryBooks';
+import Group from '@material-ui/icons/Group';
 import UserContext from '../../context/UserContext';
 
 /**
  * Render bottom navigation menu
  */
 const BottomNav = () => {
-    const { language } = useContext(LanguageContext);
     const { user } = useContext(UserContext);
     const history = useHistory();
     const [selected, setSelected] = useState(0);
@@ -71,9 +72,9 @@ const BottomNav = () => {
                     }}
                     showLabels
                 >
-                    <BottomNavigationAction label={language.dictionary.keys} />
-                    <BottomNavigationAction label={language.dictionary.btnGroupCollections} />
-                    <BottomNavigationAction label={language.dictionary.workgroups} />
+                    <BottomNavigationAction icon={<ListAlt />} />
+                    <BottomNavigationAction icon={<LibraryBooks />} />
+                    <BottomNavigationAction icon={<Group />} />
                 </BottomNavigation>
             )}
         </div>

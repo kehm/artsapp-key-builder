@@ -13,7 +13,7 @@ import ConfirmDelete from './ConfirmDelete';
 import { createWorkgroup } from '../../utils/api/create';
 import { updateWorkgroup } from '../../utils/api/update';
 import { deleteWorkgroup } from '../../utils/api/delete';
-import CloseButton from '../components/CloseButton';
+import CloseButton from '../components/buttons/CloseButton';
 import getInputChange from '../../utils/input-change';
 import TextInput from '../components/inputs/TextInput';
 

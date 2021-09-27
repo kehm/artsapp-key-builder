@@ -10,13 +10,14 @@ import { dictionary, options } from '../../languages/language';
 import Help from '../dialogs/Help';
 import UnsavedChanges from '../dialogs/UnsavedChanges';
 import BottomNav from './BottomNav';
-import LanguageSelect from './inputs/LanguageSelect';
+import LanguageSelect from '../components/inputs/LanguageSelect';
 import { getOrganization, getRole } from '../../utils/api/get';
+import TitleBar from './TitleBar';
 
 /**
  * Render navigation menu
  */
-const Nav = ({ signOut }) => {
+const Nav = ({ title, signOut }) => {
     const { language, setLanguage } = useContext(LanguageContext);
     const { user } = useContext(UserContext);
     const history = useHistory();
@@ -108,6 +109,7 @@ const Nav = ({ signOut }) => {
 
     return (
         <nav>
+            <TitleBar title={title} />
             {user.authenticated && (
                 <span className="absolute top-2 right-8">
                     <Button
@@ -122,7 +124,7 @@ const Nav = ({ signOut }) => {
                     </Button>
                 </span>
             )}
-            <div className="fixed h-full hidden md:inline w-56 xl:w-64 bg-artsapp-web bg-no-repeat bg-cover z-10 text-white">
+            <div className="fixed h-full hidden lg:inline w-56 xl:w-64 bg-artsapp-web bg-no-repeat bg-cover z-10 text-white">
                 <button type="button" onClick={() => handleSelect(0)}>
                     <img className="mt-4 mr-4" src={logo} alt="ArtsApp logo" height={46} />
                 </button>

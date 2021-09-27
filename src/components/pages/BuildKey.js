@@ -20,7 +20,7 @@ import TaxaList from '../components/lists/TaxaList';
 import CharacterList from '../components/lists/CharacterList';
 import UnsavedChanges from '../dialogs/UnsavedChanges';
 import CreateRevisionNote from '../dialogs/CreateRevisionNote';
-import BackButton from '../components/BackButton';
+import BackButton from '../components/buttons/BackButton';
 import { findParentTaxa, findTaxa, findTaxon } from '../../utils/taxon';
 import SetRevisionStatus from '../dialogs/SetRevisionStatus';
 import { findRevisionStatusName } from '../../utils/translation';

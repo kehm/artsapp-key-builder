@@ -16,7 +16,7 @@ import LanguageSwitches from '../components/inputs/LanguageSwitches';
 import UnsavedChanges from '../dialogs/UnsavedChanges';
 import CollectionSelect from '../components/inputs/CollectionSelect';
 import KeyGroupSelect from '../components/inputs/KeyGroupSelect';
-import BackButton from '../components/BackButton';
+import BackButton from '../components/buttons/BackButton';
 import ConfirmDelete from '../dialogs/ConfirmDelete';
 import ConfirmPublish from '../dialogs/ConfirmPublish';
 import ProgressIndicator from '../components/ProgressIndicator';

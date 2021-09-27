@@ -11,7 +11,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import LanguageContext from '../../context/LanguageContext';
-import CloseButton from '../components/CloseButton';
+import CloseButton from '../components/buttons/CloseButton';
 import { updateRevisionStatus } from '../../utils/api/update';
 import getInputChange from '../../utils/input-change';
 import UserContext from '../../context/UserContext';
