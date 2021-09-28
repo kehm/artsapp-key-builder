@@ -20,11 +20,12 @@ import UserContext from '../../context/UserContext';
 import MissingPermission from '../components/MissingPermission';
 import isPermitted from '../../utils/is-permitted';
 import TestKey from '../dialogs/TestKey';
+import ActionButton from '../components/buttons/ActionButton';
 
 /**
  * Render key info page
  */
-const Key = () => {
+const Key = ({ onSetTitle }) => {
     const { language } = useContext(LanguageContext);
     const { user } = useContext(UserContext);
     const { keyId } = useParams();
@@ -117,6 +118,7 @@ const Key = () => {
         const info = key.key_info && key.key_info.find(
             (element) => element.languageCode === selectedLanguage,
         );
+        onSetTitle(info && info.title ? info.title : language.dictionary.keys);
         const createdAt = key.created_at ? formatDate(key.created_at, true) : undefined;
         const modified = key.updated_at ? formatDate(key.updated_at) : undefined;
         return (
@@ -137,7 +139,6 @@ const Key = () => {
                         )}
                     </Tabs>
                 </AppBar>
-                <h1 className="font-light">{info && info.title}</h1>
                 <ThumbnailList media={key && key.media} />
                 <div className="max-w-2xl mt-6" dangerouslySetInnerHTML={{ __html: info && info.description }} />
                 <h2 className="mb-4 mt-8">{language.dictionary.keyInfo}</h2>
@@ -226,29 +227,23 @@ const Key = () => {
         }
         return (
             <>
-                <div className="flex relative mb-8 mt-4">
-                    <Button
-                        variant="contained"
-                        color="secondary"
-                        size="medium"
-                        endIcon={<EditOutlined />}
+                <div className="flex relative mt-6">
+                    <ActionButton
+                        label={language.dictionary.btnEditKey}
+                        icon={<EditOutlined />}
                         onClick={() => setOpenEditDialog(true)}
                         disabled={key && !key.createdBy && !key.isEditor && !isPermitted(user, ['EDIT_KEY'], key.workgroupId || true)}
+                    />
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        size="medium"
+                        endIcon={<EditOutlined />}
+                        onClick={() => history.push(`/edit/${keyId}`)}
+                        disabled={key && !key.createdBy && !isPermitted(user, ['EDIT_KEY_INFO'], key.workgroupId || true)}
                     >
-                        {language.dictionary.btnEditKey}
+                        {language.dictionary.btnEditInfo}
                     </Button>
-                    <span className="ml-4">
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            size="medium"
-                            endIcon={<EditOutlined />}
-                            onClick={() => history.push(`/edit/${keyId}`)}
-                            disabled={key && !key.createdBy && !isPermitted(user, ['EDIT_KEY_INFO'], key.workgroupId || true)}
-                        >
-                            {language.dictionary.btnEditInfo}
-                        </Button>
-                    </span>
                     <span className="ml-4">
                         <Button
                             variant="contained"
@@ -282,7 +277,7 @@ const Key = () => {
     };
 
     return (
-        <div className="py-14 px-4 lg:w-10/12 m-auto">
+        <div className="py-14 px-4 lg:w-10/12 m-auto pb-28 lg:pb-2">
             <BackButton onClick={() => history.goBack()} />
             {key && renderActionBar()}
             {error && <p className="text-red-600 mt-4">{error}</p>}

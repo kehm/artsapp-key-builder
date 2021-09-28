@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { useHistory, useLocation } from 'react-router';
+import React from 'react';
+import { useHistory } from 'react-router';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import BackButton from '../components/buttons/BackButton';
 import LogoButton from '../components/buttons/LogoButton';
 
 /**
@@ -10,18 +9,6 @@ import LogoButton from '../components/buttons/LogoButton';
  */
 const TitleBar = ({ title }) => {
     const history = useHistory();
-    const location = useLocation();
-    const [showReturn, setShowReturn] = useState(false);
-
-    /**
-     * Check URL path and show return button if nested path
-     */
-    useEffect(() => {
-        const path = location.pathname.split('/');
-        if (path.length > 2 || path.includes('create') || location.search.includes('page')) {
-            setShowReturn(true);
-        } else setShowReturn(false);
-    }, [location]);
 
     /**
      * Render toolbar
@@ -30,12 +17,10 @@ const TitleBar = ({ title }) => {
      */
     const renderToolbar = () => (
         <Toolbar>
-            <span className="lg:hidden">
-                {showReturn
-                    ? <BackButton onClick={() => history.goBack()} />
-                    : <LogoButton onClick={() => history.push('/')} />}
+            <span className="absolute lg:hidden top-0 left-2">
+                <LogoButton onClick={() => history.push('/')} />
             </span>
-            <h1 className="font-normal ml-2 w-48 lg:w-96 overflow-hidden overflow-ellipsis whitespace-nowrap">
+            <h1 className="font-normal ml-10 w-48 lg:w-96 overflow-hidden overflow-ellipsis whitespace-nowrap">
                 {title}
             </h1>
         </Toolbar>
@@ -44,12 +29,22 @@ const TitleBar = ({ title }) => {
     return (
         <>
             <div className="fixed w-full z-20 lg:left-56 xl:left-64 lg:hidden">
-                <AppBar position="static" color="primary" variant="elevation">
+                <AppBar
+                    position="static"
+                    color="primary"
+                    variant="elevation"
+                    className="pb-1"
+                >
                     {renderToolbar()}
                 </AppBar>
             </div>
             <div className="fixed w-full z-20 lg:left-56 xl:left-64 hidden lg:inline">
-                <AppBar position="static" color="inherit" variant="outlined">
+                <AppBar
+                    position="static"
+                    color="inherit"
+                    variant="outlined"
+                    className="pb-1"
+                >
                     {renderToolbar()}
                 </AppBar>
             </div>

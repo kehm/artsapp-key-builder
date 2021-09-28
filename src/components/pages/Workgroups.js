@@ -12,11 +12,12 @@ import UserWorkgroups from '../dialogs/UserWorkgroups';
 import UserContext from '../../context/UserContext';
 import MissingPermission from '../components/MissingPermission';
 import isPermitted from '../../utils/is-permitted';
+import ActionButton from '../components/buttons/ActionButton';
 
 /**
  * Render workgroups page
  */
-const Workgroups = () => {
+const Workgroups = ({ onSetTitle }) => {
     const { language } = useContext(LanguageContext);
     const { user } = useContext(UserContext);
     const [workgroups, setWorkgroups] = useState(undefined);
@@ -32,6 +33,7 @@ const Workgroups = () => {
      */
     useEffect(() => {
         if (!workgroups) {
+            onSetTitle(language.dictionary.workgroups);
             getWorkgroups().then((groups) => {
                 setWorkgroups(groups);
             }).catch(() => setError(language.dictionary.internalAPIError));
@@ -70,29 +72,23 @@ const Workgroups = () => {
             label = language.dictionary.notEditWorkgroup;
         }
         return (
-            <div className="mb-4">
-                <Button
-                    variant="contained"
-                    color="secondary"
-                    size="medium"
-                    endIcon={<Add />}
+            <div className="mt-2">
+                <ActionButton
+                    label={language.dictionary.btnNewWorkgroup}
+                    icon={<Add />}
                     onClick={() => setCreateDialog({ open: true, workgroup: undefined })}
                     disabled={!isPermitted(user, ['CREATE_WORKGROUP'])}
+                />
+                <Button
+                    variant="contained"
+                    color="primary"
+                    size="medium"
+                    endIcon={<Group />}
+                    type="button"
+                    onClick={() => setOpenWorkgroups(true)}
                 >
-                    {language.dictionary.btnNewWorkgroup}
+                    {language.dictionary.btnMyGroups}
                 </Button>
-                <span className="ml-4">
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        size="medium"
-                        endIcon={<Group />}
-                        type="button"
-                        onClick={() => setOpenWorkgroups(true)}
-                    >
-                        {language.dictionary.btnMyGroups}
-                    </Button>
-                </span>
                 <MissingPermission
                     show={!isPermitted(user, ['CREATE_WORKGROUP']) || !isPermitted(user, ['EDIT_WORKGROUP'])}
                     label={label}
@@ -102,9 +98,8 @@ const Workgroups = () => {
     };
 
     return (
-        <div className="py-14 px-4 md:w-10/12 m-auto">
-            <h1>{language.dictionary.workgroups}</h1>
-            <p className="my-4">{language.dictionary.listWorkgroups}</p>
+        <div className="py-14 md:w-10/12 m-auto pb-28 lg:pb-2">
+            <p className="px-2 mt-20 lg:mt-6">{language.dictionary.listWorkgroups}</p>
             {workgroups && workgroups.length > 0 ? (
                 <>
                     {renderActions()}

@@ -7,6 +7,7 @@ import PostAdd from '@material-ui/icons/PostAdd';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import { makeStyles } from '@material-ui/core/styles';
 import LanguageContext from '../../context/LanguageContext';
 import { createKey, createRevision } from '../../utils/api/create';
 import { getCollections, getKeyGroups, getUserWorkgroups } from '../../utils/api/get';
@@ -29,10 +30,17 @@ import WorkgroupSelect from '../components/inputs/WorkgroupSelect';
 import CreateWorkgroup from '../dialogs/CreateWorkgroup';
 import isPermitted from '../../utils/is-permitted';
 
+const useStyles = makeStyles(() => ({
+    bar: {
+        zIndex: 0,
+        marginBottom: '1.5rem',
+        marginTop: '1.5rem',
+    },
+}));
 /**
  * Render page to create new key
  */
-const CreateKey = () => {
+const CreateKey = ({ onSetTitle }) => {
     const defaultFormValues = {
         titleNo: '',
         titleEn: '',
@@ -47,6 +55,7 @@ const CreateKey = () => {
     const defaultLanguages = { no: true, en: false };
     const { language } = useContext(LanguageContext);
     const { user } = useContext(UserContext);
+    const classes = useStyles();
     const [formValues, setFormValues] = useState(defaultFormValues);
     const [languages, setLanguages] = useState(defaultLanguages);
     const [workgroups, setWorkgroups] = useState(undefined);
@@ -66,6 +75,7 @@ const CreateKey = () => {
      */
     useEffect(() => {
         if (!groups) {
+            onSetTitle(language.dictionary.createKey);
             getKeyGroups().then((keyGroups) => {
                 setGroups(keyGroups);
             }).catch(() => setError(language.dictionary.internalAPIError));
@@ -286,7 +296,7 @@ const CreateKey = () => {
      * @returns JSX
      */
     const renderLangBar = () => (
-        <AppBar position="relative" className="my-6" color="default">
+        <AppBar position="relative" className={classes.bar} color="default">
             <Tabs value={tab} onChange={(e, val) => setTab(val)} aria-label="language tabs">
                 {languages.no && (
                     <Tab
@@ -312,7 +322,6 @@ const CreateKey = () => {
                 )}
             />
             <form className="mt-10 max-w-2xl" autoComplete="off" onSubmit={handleSubmit}>
-                <h1>{language.dictionary.createKey}</h1>
                 <p className="mt-4 mb-6">{language.dictionary.sectionCreateKey}</p>
                 <LanguageSwitches
                     switches={languages}

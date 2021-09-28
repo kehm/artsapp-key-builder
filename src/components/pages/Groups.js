@@ -16,11 +16,12 @@ import MissingPermission from '../components/MissingPermission';
 import GroupKeys from '../dialogs/GroupKeys';
 import AddToCollection from '../dialogs/AddToCollection';
 import isPermitted from '../../utils/is-permitted';
+import ActionButton from '../components/buttons/ActionButton';
 
 /**
  * Render key groups/collections page
  */
-const Groups = () => {
+const Groups = ({ onSetTitle }) => {
     const { language } = useContext(LanguageContext);
     const { user } = useContext(UserContext);
     const [groups, setGroups] = useState(undefined);
@@ -36,6 +37,7 @@ const Groups = () => {
      */
     useEffect(() => {
         if (!groups) {
+            onSetTitle(language.dictionary.groupsAndCollections);
             getKeyGroups(language.language.split('_')[0]).then((keyGroups) => {
                 setGroups(keyGroups);
             }).catch(() => setError(language.dictionary.internalAPIError));
@@ -186,18 +188,14 @@ const Groups = () => {
         }
         return (
             <>
-                <Button
-                    variant="contained"
-                    color="secondary"
-                    size="medium"
-                    endIcon={<Add />}
+                <ActionButton
+                    label={tab === 0
+                        ? language.dictionary.newKeyGroup : language.dictionary.newCollection}
+                    icon={<Add />}
                     onClick={() => setOpenCreateDialog({ dialog: tab === 0 ? 'GROUP' : 'COLLECTION' })}
                     disabled={(tab === 0 && !isPermitted(user, ['CREATE_GROUP']))
                         || (tab === 1 && !isPermitted(user, ['CREATE_COLLECTION']))}
-                >
-                    {tab === 0
-                        ? language.dictionary.newKeyGroup : language.dictionary.newCollection}
-                </Button>
+                />
                 <MissingPermission
                     show={label}
                     label={label}
@@ -207,9 +205,8 @@ const Groups = () => {
     };
 
     return (
-        <div className="py-14 px-4 md:w-10/12 m-auto">
-            <h1>{language.dictionary.groupsAndCollections}</h1>
-            <p className="my-4">{language.dictionary.sectionGroupsCollections}</p>
+        <div className="py-14 md:w-10/12 m-auto pb-28 lg:pb-2">
+            <p className="px-2 mt-20 lg:mt-6">{language.dictionary.sectionGroupsCollections}</p>
             {renderBar()}
             {renderCreateButton()}
             {renderTabs()}

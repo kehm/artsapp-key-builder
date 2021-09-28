@@ -26,11 +26,12 @@ import SetRevisionStatus from '../dialogs/SetRevisionStatus';
 import { findRevisionStatusName } from '../../utils/translation';
 import ProgressIndicator from '../components/ProgressIndicator';
 import { removeCharacterPremises } from '../../utils/character';
+import ActionButton from '../components/buttons/ActionButton';
 
 /**
  * Render build key page
  */
-const BuildKey = () => {
+const BuildKey = ({ onSetTitle }) => {
     const { language } = useContext(LanguageContext);
     const { revisionId } = useParams();
     const history = useHistory();
@@ -59,6 +60,7 @@ const BuildKey = () => {
      */
     useEffect(() => {
         if (!revision) {
+            onSetTitle(language.dictionary.buildKey);
             getRevision(revisionId).then((rev) => {
                 getKey(rev.keyId).then((key) => {
                     setLanguages({
@@ -373,28 +375,21 @@ const BuildKey = () => {
      */
     const renderActionBar = () => (
         <div className="md:flex relative mt-10">
+            <ActionButton
+                label={language.dictionary.btnSaveChanges}
+                icon={<SaveOutlined />}
+                onClick={() => setOpenModal({ open: 'SAVE', id: undefined })}
+                disabled={changesSaved}
+            />
             <Button
                 variant="contained"
                 color="secondary"
                 size="medium"
-                endIcon={<SaveOutlined />}
-                onClick={() => setOpenModal({ open: 'SAVE', id: undefined })}
-                disabled={changesSaved}
+                endIcon={<Add />}
+                onClick={() => setOpenModal({ open: 'TAXA', id: undefined })}
             >
-                <span className="xl:hidden">{language.dictionary.btnSave}</span>
-                <span className="hidden xl:inline">{language.dictionary.btnSaveChanges}</span>
+                {language.dictionary.newTaxon}
             </Button>
-            <span className="ml-4">
-                <Button
-                    variant="contained"
-                    color="secondary"
-                    size="medium"
-                    endIcon={<Add />}
-                    onClick={() => setOpenModal({ open: 'TAXA', id: undefined })}
-                >
-                    {language.dictionary.newTaxon}
-                </Button>
-            </span>
             <span className="ml-4">
                 <Button
                     variant="contained"
@@ -409,6 +404,19 @@ const BuildKey = () => {
             <span className="ml-4">
                 <Button
                     variant="contained"
+                    color="secondary"
+                    size="medium"
+                    endIcon={<FlagOutlined />}
+                    onClick={() => setOpenModal({ open: 'STATUS', id: undefined })}
+                    disabled={!changesSaved}
+                >
+                    <span className="xl:hidden">{language.dictionary.headerChangeStatus}</span>
+                    <span className="hidden xl:inline">{`${language.dictionary.headerChangeStatus} ${revision ? `(${findRevisionStatusName(revision.status, language)})` : ''}`}</span>
+                </Button>
+            </span>
+            <span className="xl:absolute right-0 ml-4">
+                <Button
+                    variant="contained"
                     color="primary"
                     size="medium"
                     endIcon={<Flip />}
@@ -418,19 +426,6 @@ const BuildKey = () => {
                     {sortByCharacters
                         ? language.dictionary.btnSortTaxa
                         : language.dictionary.btnSortCharacters}
-                </Button>
-            </span>
-            <span className="xl:absolute right-0 ml-4">
-                <Button
-                    variant="contained"
-                    color="secondary"
-                    size="medium"
-                    endIcon={<FlagOutlined />}
-                    onClick={() => setOpenModal({ open: 'STATUS', id: undefined })}
-                    disabled={!changesSaved}
-                >
-                    <span className="xl:hidden">{language.dictionary.headerChangeStatus}</span>
-                    <span className="hidden xl:inline">{`${language.dictionary.headerChangeStatus} ${revision ? `(${findRevisionStatusName(revision.status, language)})` : ''}`}</span>
                 </Button>
             </span>
         </div>
@@ -496,10 +491,7 @@ const BuildKey = () => {
     return (
         <div className="relative py-14 px-4 lg:w-11/12 m-auto">
             <BackButton onClick={() => handleCloseDialog(!changesSaved)} />
-            <div className="max-w-6xl mt-4">
-                <h1>{language.dictionary.buildKey}</h1>
-                <p className="my-4">{language.dictionary.rememberSave}</p>
-            </div>
+            <p className="mt-6">{language.dictionary.rememberSave}</p>
             {renderActionBar()}
             <hr className="mt-10 mb-6" />
             {error && <p className="text-red-600 mt-4">{error}</p>}
