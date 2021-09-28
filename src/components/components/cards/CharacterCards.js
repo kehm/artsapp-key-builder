@@ -49,11 +49,9 @@ const CharacterCards = ({
                     statements.filter((statement) => statement.taxonId === element.id),
                 );
             });
-            arr = arr.filter((element) => {
-                const tmp = taxaStatements.find((obj) => obj.characterId === element.id);
-                if (tmp) return false;
-                return true;
-            });
+            arr = arr.filter(
+                (element) => !taxaStatements.find((obj) => obj.characterId === element.id),
+            );
         }
         setTaxonCharacters(arr);
     }, [taxon, characters, statements]);
@@ -79,9 +77,9 @@ const CharacterCards = ({
                 && characters.find((element) => element.id === characterId);
             if (character && character.states) {
                 let value;
-                if (character.type && character.type.toUpperCase() === 'NUMERICAL') {
-                    value = [parseFloat(character.states.min), parseFloat(character.states.max)];
-                } else value = character.states[0].id;
+                if (Array.isArray(character.states)) {
+                    value = character.states[0].id;
+                } else value = [parseFloat(character.states.min), parseFloat(character.states.max)];
                 arr.push({ taxonId: taxon.id, characterId, value });
             }
         } else {
@@ -299,10 +297,10 @@ const CharacterCards = ({
         let arr;
         switch (filter) {
             case 'CATEGORICAL':
-                arr = taxonCharacters.filter((character) => character.type !== 'numerical');
+                arr = taxonCharacters.filter((character) => Array.isArray(character.states));
                 break;
             case 'NUMERICAL':
-                arr = taxonCharacters.filter((character) => character.type === 'numerical');
+                arr = taxonCharacters.filter((character) => !Array.isArray(character.states));
                 break;
             default:
                 arr = taxonCharacters;

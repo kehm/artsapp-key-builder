@@ -262,5 +262,6 @@
     "noKeysInGroup": "Det er ingen nøkler i denne gruppen.",
     "noKeysInCollection": "Det er ingen nøkler i denne samlingen.",
     "selectTestRevision": "Velg revisjonen du vil teste. Dette vil ta deg til ArtsApp nøkkelavspiller-applikasjonen.",
-    "headerTestKey": "Test nøkkel"
+    "headerTestKey": "Test nøkkel",
+    "warningChangeTaxon": "Dersom du endrer takson-relasjonen for taksonet, vil alle valgte karakterer for taksonet tilbakestilles og nye karakterer vil bli arvet fra den nye relasjonen."
 }

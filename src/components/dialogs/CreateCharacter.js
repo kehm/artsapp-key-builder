@@ -80,8 +80,9 @@ const CreateCharacter = ({
         if (id && revision && revision.content && revision.content.characters) {
             const character = revision.content.characters.find((element) => element.id === id);
             if (character) {
-                if (character.type && character.type.toUpperCase() === 'NUMERICAL') {
-                    getNumericalCharacterInfoValues(
+                if (Array.isArray(character.states)) {
+                    setExistingStates(character.states.map((element) => element.id));
+                    getCategoricalCharacterInfoValues(
                         character,
                         formValues,
                         revision.media,
@@ -90,8 +91,7 @@ const CreateCharacter = ({
                         setFormValues(values);
                     }).catch(() => setError(language.dictionary.internalAPIError));
                 } else {
-                    setExistingStates(character.states.map((element) => element.id));
-                    getCategoricalCharacterInfoValues(
+                    getNumericalCharacterInfoValues(
                         character,
                         formValues,
                         revision.media,
@@ -179,7 +179,7 @@ const CreateCharacter = ({
             let characterId = id;
             if (id) {
                 revisionId = await updateCharacter(id, values);
-                if (values.type !== 'numerical') {
+                if (values.type !== 'NUMERICAL') {
                     await checkAlternatives(values.alternatives.map((element) => element.id));
                 }
             } else {

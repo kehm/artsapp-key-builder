@@ -17,10 +17,11 @@ const ActionButton = ({
                 onClick={() => onClick()}
                 disabled={disabled}
             >
+                {label}
                 {icon}
             </Fab>
         </div>
-        <div className="hidden lg:inline fixed z-50 top-2 right-32 h-16">
+        <div className="hidden lg:inline fixed z-50 top-3 right-32 h-16">
             {label ? (
                 <Button
                     variant="contained"

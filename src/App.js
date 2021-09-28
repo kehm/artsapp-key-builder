@@ -47,7 +47,7 @@ const App = () => {
   const userValue = { user, setUser };
   const [authenticated, setAuthenticated] = useState(false);
   const [showProgress, setShowProgress] = useState(true);
-  const [pageTitle, setPageTitle] = useState('undefined');
+  const [pageTitle, setPageTitle] = useState(undefined);
 
   /**
    * Check for a valid user session
@@ -112,13 +112,6 @@ const App = () => {
    * @param {Object} Component Component to render
    * @param {string} permission Required permission
    */
-  const renderPage = (Component, permission) => (
-    <div className="h-full lg:ml-56 mb-10 md:mb-0 bg-white z-50 text-darkGrey">
-      <Component onSetTitle={(title) => setPageTitle(title)} />
-    </div>
-  );
-
-  /*
   const renderPage = (Component, permission) => {
     if (!authenticated) return null;
     if (user.authenticated) {
@@ -133,7 +126,6 @@ const App = () => {
     }
     return <Redirect to="/signin" />;
   };
-  */
 
   return (
     <StrictMode>

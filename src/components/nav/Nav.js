@@ -3,6 +3,7 @@ import { useHistory } from 'react-router';
 import HelpOutline from '@material-ui/icons/HelpOutline';
 import ExitToApp from '@material-ui/icons/ExitToApp';
 import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
 import logo from '../../images/artsapp-key-builder-logo.png';
 import LanguageContext from '../../context/LanguageContext';
 import UserContext from '../../context/UserContext';
@@ -111,17 +112,15 @@ const Nav = ({ title, signOut }) => {
         <nav>
             <TitleBar title={title} />
             {user.authenticated && (
-                <span className="absolute top-2 right-8">
-                    <Button
-                        variant="text"
-                        color="default"
-                        size="medium"
-                        type="button"
-                        endIcon={<HelpOutline />}
+                <span className="fixed top-1 lg:top-2 right-1 lg:right-8 text-white lg:text-primary z-40">
+                    <IconButton
+                        edge="start"
+                        aria-label="help"
+                        color="inherit"
                         onClick={() => setShowHelp(true)}
                     >
-                        {language.dictionary.help}
-                    </Button>
+                        <HelpOutline />
+                    </IconButton>
                 </span>
             )}
             <div className="fixed h-full hidden lg:inline w-56 xl:w-64 bg-artsapp-web bg-no-repeat bg-cover z-10 text-white">

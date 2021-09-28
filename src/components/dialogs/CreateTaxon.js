@@ -372,6 +372,7 @@ const CreateTaxon = ({
                         )}
                     />
                     {renderScientificNameInput()}
+                    {id && <p className="mb-2 text-blue-600">{language.dictionary.warningChangeTaxon}</p>}
                     <Autocomplete
                         id="parentId"
                         fullWidth

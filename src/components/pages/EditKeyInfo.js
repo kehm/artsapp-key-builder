@@ -39,7 +39,7 @@ import isPermitted from '../../utils/is-permitted';
 /**
  * Render key edit info page
  */
-const EditKeyInfo = () => {
+const EditKeyInfo = ({ onSetTitle }) => {
     const [defaultFormValues, setDefaultFormValues] = useState({
         status: '',
         version: '',
@@ -85,6 +85,7 @@ const EditKeyInfo = () => {
      */
     useEffect(() => {
         if (!key && !revisions && !collections && !groups) {
+            onSetTitle(language.dictionary.keyInfo);
             getKey(keyId).then((element) => {
                 getKeyMetadata(element.id, language.language.split('_')[0]).then((metadata) => {
                     setRevisions(metadata.revisions);
@@ -455,7 +456,6 @@ const EditKeyInfo = () => {
                 )}
             />
             <form className="relative mt-10 max-w-2xl" autoComplete="off" onSubmit={handleSubmit}>
-                <h1>{language.dictionary.keyInfo}</h1>
                 <p className="mt-4 mb-6">{language.dictionary.sectionEditKey}</p>
                 <LanguageSwitches
                     switches={languages}

@@ -64,7 +64,17 @@ const PremiseTable = ({
         const arr = [...premises];
         if (char) {
             const tmp = [];
-            if (char.type === 'numerical') {
+            if (Array.isArray(char.states)) {
+                char.states.forEach((state) => {
+                    tmp.push({
+                        index,
+                        characterId: char.id,
+                        stateId: state.id,
+                        value: true,
+                        condition: selectedNots[index] ? '!=' : '==',
+                    });
+                });
+            } else {
                 const nots = [...selectedNots];
                 nots[index] = false;
                 setSelectedNots(nots);
@@ -81,16 +91,6 @@ const PremiseTable = ({
                     stateId: char.states.id,
                     value: char.states.max,
                     condition: '<=',
-                });
-            } else {
-                char.states.forEach((state) => {
-                    tmp.push({
-                        index,
-                        characterId: char.id,
-                        stateId: state.id,
-                        value: true,
-                        condition: selectedNots[index] ? '!=' : '==',
-                    });
                 });
             }
             arr[index] = tmp;
@@ -110,7 +110,17 @@ const PremiseTable = ({
         let charStates = char.states;
         if (states.length > 0) charStates = states;
         const tmp = [];
-        if (char.type === 'numerical') {
+        if (Array.isArray(char.states)) {
+            charStates.forEach((state) => {
+                tmp.push({
+                    index,
+                    characterId: char.id,
+                    stateId: state.id,
+                    value: true,
+                    condition: selectedNots[index] ? '!=' : '==',
+                });
+            });
+        } else {
             tmp.push({
                 index,
                 characterId: char.id,
@@ -124,16 +134,6 @@ const PremiseTable = ({
                 stateId: states.length > 0 ? char.states.id : charStates.id,
                 value: states.length > 0 ? `${charStates[1]}` : charStates.max,
                 condition: '<=',
-            });
-        } else {
-            charStates.forEach((state) => {
-                tmp.push({
-                    index,
-                    characterId: char.id,
-                    stateId: state.id,
-                    value: true,
-                    condition: selectedNots[index] ? '!=' : '==',
-                });
             });
         }
         arr[index] = tmp;
@@ -207,8 +207,8 @@ const PremiseTable = ({
      */
     const renderPremise = (index) => {
         const char = findCharacter(index);
-        const type = char && char.states && char.type ? char.type.toUpperCase() : undefined;
-        if (type === 'NUMERICAL') {
+        if (!char) return null;
+        if (!Array.isArray(char.states)) {
             let defaultState = [
                 parseFloat(char.states.min),
                 parseFloat(char.states.max),
@@ -288,10 +288,10 @@ const PremiseTable = ({
                                 <Checkbox
                                     checked={selectedNots[index] || false}
                                     onChange={(e) => handleChangeNots(index, e.target.checked)}
-                                    disabled={char && char.type === 'numerical'}
+                                    disabled={char && !Array.isArray(character.states)}
                                 />
                             )}
-                            label={char && char.type === 'numerical' ? '' : language.dictionary.operatorNot}
+                            label={char && !Array.isArray(char.states) ? '' : language.dictionary.operatorNot}
                         />
                         <span className="absolute right-2">
                             <IconButton

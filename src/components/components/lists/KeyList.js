@@ -123,9 +123,9 @@ const KeyList = ({ keys, error, onClickListItem }) => {
                                     </span>
                                 )}
                                 secondary={(
-                                    <div className="ml-3">
+                                    <span className="block ml-3">
                                         {`${language.dictionary.created} ${formatDate(key.created_at, true)} ${formatDate(key.created_at, true) !== formatDate(key.updated_at, true) ? `(${language.dictionary.updated} ${formatDate(key.updated_at, true)})` : ''}`}
-                                    </div>
+                                    </span>
                                 )}
                             />
                         </ListItem>
