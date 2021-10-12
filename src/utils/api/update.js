@@ -40,7 +40,23 @@ export const hideKey = async (keyId) => {
  */
 export const updateRevisionStatus = async (revisionId, data) => {
     const response = await axios.put(
-        `${process.env.REACT_APP_BUILDER_API_URL}/revisions/${revisionId}`,
+        `${process.env.REACT_APP_BUILDER_API_URL}/revisions/status/${revisionId}`,
+        data,
+        { timeout: process.env.REACT_APP_HTTP_TIMEOUT },
+    );
+    return response.data;
+};
+
+/**
+ * Update revision mode
+ *
+ * @param {string} revisionId Revision ID
+ * @param {Object} data Object with mode and key ID
+ * @returns {Object} Response data
+ */
+export const updateRevisionMode = async (revisionId, data) => {
+    const response = await axios.put(
+        `${process.env.REACT_APP_BUILDER_API_URL}/revisions/mode/${revisionId}`,
         data,
         { timeout: process.env.REACT_APP_HTTP_TIMEOUT },
     );

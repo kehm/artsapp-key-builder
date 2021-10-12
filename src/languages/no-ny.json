@@ -263,5 +263,14 @@
     "noKeysInCollection": "Det er ingen nøklar i denne samlinga.",
     "selectTestRevision": "Vel revisjonen du vil teste. Dette vil ta deg til ArtsApp nøkkelavspillar-applikasjonen.",
     "headerTestKey": "Test nøkkel",
-    "warningChangeTaxon": "Om du endrar takson-relasjonen for taksonet, vil alle valte karakterar for taksonet tilbakestillast og nye karakterar vil bli arva frå den nye relasjonen."
+    "warningChangeTaxon": "Om du endrar takson-relasjonen for taksonet, vil alle valte karakterar for taksonet tilbakestillast og nye karakterar vil bli arva frå den nye relasjonen.",
+    "sectionChangeMode": "ArtsApp støtter to forskjellige innstillinger for filtrering av karakterar og relevante takson. Om du vel å vise alle karakterar vil ArtsApp ikkje filtrere bort takson som ikkje er relevant for ein valt karakter. Om du vel å skjule urelevante karakterar, vil takson som ikkje er gitt nokon verdi for den valte karakteren skjules frå visninga så snart karakteren er valt. Standard innstilling er å skjule urelevante karakterar.",
+    "mode1": "Nøkkelen viser alle karakterar",
+    "mode2": "Nøkkelen skjuler urelevante karakterar",
+    "labelMode1": "Vis alle karakterar",
+    "labelMode2": "Skjul urelevante karakterar",
+    "labelMode": "Vis/skjul",
+    "change": "endre",
+    "headerChangeMode": "Endre innstilling",
+    "modeChangeEffect": "Endringa vil ha effekt med ein gong. Dersom revisjonen er publisert vil endringa også gjelde for den publiserte versjonen av nøkkelen."
 }

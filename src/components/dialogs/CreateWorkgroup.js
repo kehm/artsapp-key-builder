@@ -146,9 +146,7 @@ const CreateWorkgroup = ({
                         )}
                     />
                     <p className="mb-8">
-                        {language.dictionary.sectionNewWorkgroup}
-                        &nbsp;
-                        {language.dictionary.sectionNewWorkgroupInfo}
+                        {`${language.dictionary.sectionNewWorkgroup} ${language.dictionary.sectionNewWorkgroupInfo}`}
                     </p>
                     <TextInput
                         name="name"

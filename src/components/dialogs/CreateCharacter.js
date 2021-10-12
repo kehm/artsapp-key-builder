@@ -355,12 +355,7 @@ const CreateCharacter = ({
      */
     const renderCharacterInputs = () => (
         <form autoComplete="off" hidden={step === 1}>
-            <p>
-                {language.dictionary.sectionNewCharacter}
-                &nbsp;
-                {language.dictionary.activeLanguages}
-                :
-            </p>
+            <p>{`${language.dictionary.sectionNewCharacter} ${language.dictionary.activeLanguages}:`}</p>
             <ul className="font-semibold">
                 {languages.langNo && <li>{language.dictionary.norwegian}</li>}
                 {languages.langEn && <li>{language.dictionary.english}</li>}
@@ -488,9 +483,8 @@ const CreateCharacter = ({
             <div className="p-2">
                 <DialogTitle>
                     {id ? language.dictionary.editCharacter : language.dictionary.newCharacter}
-                    &nbsp;
                     <span className="font-light">
-                        {`(${language.dictionary.labelStep} ${step + 1}/2)`}
+                        {` (${language.dictionary.labelStep} ${step + 1}/2)`}
                     </span>
                 </DialogTitle>
                 <DialogContent>

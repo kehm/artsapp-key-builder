@@ -45,7 +45,7 @@ const Keys = ({ onSetTitle }) => {
     }, [filterKeys, language]);
 
     return (
-        <div className="py-14 md:w-10/12 m-auto pb-28 lg:pb-2">
+        <div className="py-14 md:w-10/12 m-auto pb-28">
             <p className="px-2 mt-20 lg:mt-6">{language.dictionary.sectionKeys}</p>
             <ActionButton
                 label={language.dictionary.btnNewKey}

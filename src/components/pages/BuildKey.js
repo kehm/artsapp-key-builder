@@ -27,6 +27,7 @@ import { findRevisionStatusName } from '../../utils/translation';
 import ProgressIndicator from '../components/ProgressIndicator';
 import { removeCharacterPremises } from '../../utils/character';
 import ActionButton from '../components/buttons/ActionButton';
+import SetRevisionMode from '../dialogs/SetRevisionMode';
 
 /**
  * Render build key page
@@ -50,6 +51,7 @@ const BuildKey = ({ onSetTitle }) => {
     const [changesSaved, setChangesSaved] = useState(true);
     const [showUnsavedDialog, setShowUnsavedDialog] = useState(false);
     const [showProgress, setShowProgress] = useState(true);
+    const [openChangeMode, setOpenChangeMode] = useState(false);
     const [languages, setLanguages] = useState({
         langNo: false,
         langEn: false,
@@ -179,6 +181,7 @@ const BuildKey = ({ onSetTitle }) => {
                     media: JSON.stringify(revision.media),
                     note,
                     status,
+                    mode: revision.mode,
                 });
                 setChangesSaved(true);
                 handleNewRevision(revId);
@@ -247,6 +250,7 @@ const BuildKey = ({ onSetTitle }) => {
                 content: JSON.stringify(content),
                 media: JSON.stringify(revision.media),
                 note,
+                mode: revision.mode,
             });
             handleNewRevision(revId);
         } else window.scrollTo(0, 0);
@@ -480,6 +484,15 @@ const BuildKey = ({ onSetTitle }) => {
                     }}
                 />
             )}
+            {openModal.open === 'MODE' && (
+                <SetRevisionMode
+                    currentMode={revision && revision.mode}
+                    revision={revision}
+                    openDialog={openModal.open === 'MODE'}
+                    onClose={() => setOpenModal({ open: undefined, id: undefined })}
+                    onChanged={() => setRevision(undefined)}
+                />
+            )}
             <UnsavedChanges
                 openDialog={showUnsavedDialog}
                 onClose={() => setShowUnsavedDialog(false)}
@@ -488,12 +501,37 @@ const BuildKey = ({ onSetTitle }) => {
         </>
     );
 
+    /**
+     * Render mode info and change mode button
+     *
+     * @returns JSX
+     */
+    const renderModeInfo = () => {
+        if (revision) {
+            return (
+                <p className="mt-4">
+                    {revision.mode === 2 ? language.dictionary.mode2 : language.dictionary.mode1}
+                    <Button
+                        variant="text"
+                        size="medium"
+                        onClick={() => setOpenModal({ open: 'MODE', id: undefined })}
+                        disabled={!changesSaved}
+                    >
+                        {`(${language.dictionary.change})`}
+                    </Button>
+                </p>
+            );
+        }
+        return null;
+    };
+
     return (
         <div className="relative py-14 px-4 lg:w-11/12 m-auto">
             <BackButton onClick={() => handleCloseDialog(!changesSaved)} />
             <p className="mt-6">{language.dictionary.rememberSave}</p>
             {renderActionBar()}
-            <hr className="mt-10 mb-6" />
+            {renderModeInfo()}
+            <hr className="mb-4 mt-2" />
             {error && <p className="text-red-600 mt-4">{error}</p>}
             {renderLists()}
             {renderDialogs()}

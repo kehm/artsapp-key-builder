@@ -2,12 +2,12 @@ import React, { useContext } from 'react';
 import { Redirect } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import LaunchIcon from '@material-ui/icons/Launch';
-import ExitToApp from '@material-ui/icons/ExitToApp';
 import LanguageContext from '../../context/LanguageContext';
 import UserContext from '../../context/UserContext';
 import logo from '../../images/artsapp-key-builder-logo.png';
 import LanguageSelect from '../components/inputs/LanguageSelect';
 import { dictionary, options } from '../../languages/language';
+import ExitApp from '../components/buttons/ExitApp';
 
 /**
  * Render sign in page
@@ -53,16 +53,7 @@ const SignIn = () => {
                     options={options}
                     onChangeLanguage={(val) => handleSetLanguage(val)}
                 />
-                <a
-                    href="https://artsapp.uib.no"
-                    target="_self"
-                    rel="noopener noreferrer"
-                    className="block absolute bottom-5 left-0 right-0"
-                >
-                    <span className="align-middle">{language.dictionary.goArtsApp}</span>
-                    &nbsp;
-                    <ExitToApp color="primary" />
-                </a>
+                <ExitApp placeBottom />
             </div>
         </div>
     ));

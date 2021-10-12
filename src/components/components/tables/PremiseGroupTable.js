@@ -86,13 +86,7 @@ const PremiseGroupTable = ({
                                 </p>
                             );
                         }
-                        return (
-                            <p key={index}>
-                                {obj.condition}
-                                &nbsp;
-                                {obj.value}
-                            </p>
-                        );
+                        return <p key={index}>{`${obj.condition} ${obj.value}`}</p>;
                     }
                     return null;
                 })}

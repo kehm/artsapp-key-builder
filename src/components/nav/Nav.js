@@ -1,7 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useHistory } from 'react-router';
 import HelpOutline from '@material-ui/icons/HelpOutline';
-import ExitToApp from '@material-ui/icons/ExitToApp';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import logo from '../../images/artsapp-key-builder-logo.png';
@@ -14,6 +13,7 @@ import BottomNav from './BottomNav';
 import LanguageSelect from '../components/inputs/LanguageSelect';
 import { getOrganization, getRole } from '../../utils/api/get';
 import TitleBar from './TitleBar';
+import ExitApp from '../components/buttons/ExitApp';
 
 /**
  * Render navigation menu
@@ -189,11 +189,7 @@ const Nav = ({ title, signOut }) => {
                             </button>
                         </>
                     )}
-                    <a href="https://artsapp.uib.no" target="_self" rel="noopener noreferrer" className="block mt-8 text-white">
-                        <span className="align-middle">{language.dictionary.goArtsApp}</span>
-                        &nbsp;
-                        <ExitToApp color="primary" />
-                    </a>
+                    <ExitApp />
                 </div>
             </div>
             <BottomNav />

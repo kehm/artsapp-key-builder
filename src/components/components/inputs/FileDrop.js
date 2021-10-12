@@ -116,9 +116,7 @@ const FileDrop = ({
     return (
         <FormControl variant="filled" fullWidth>
             <InputLabel id="file-drop-label">
-                {language.dictionary.labelImages}
-                &nbsp;
-                {`(${language.dictionary.max} ${maxFiles} ${language.dictionary.files}, ${language.dictionary.maxSize})`}
+                {`${language.dictionary.labelImages} (${language.dictionary.max} ${maxFiles} ${language.dictionary.files}, ${language.dictionary.maxSize})`}
             </InputLabel>
             <Dropzone
                 onDrop={(dropped) => handleDropFiles(dropped)}

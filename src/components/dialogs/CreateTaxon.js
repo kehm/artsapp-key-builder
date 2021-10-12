@@ -385,12 +385,7 @@ const CreateTaxon = ({
                         noOptionsText={language.dictionary.noAlternatives}
                         renderInput={(params) => <TextField {...params} label={language.dictionary.labelParentTaxon} variant="outlined" />}
                     />
-                    <p>
-                        {language.dictionary.sectionNewTaxon}
-                        &nbsp;
-                        {language.dictionary.activeLanguages}
-                        :
-                    </p>
+                    <p>{`${language.dictionary.sectionNewTaxon} ${language.dictionary.activeLanguages}:`}</p>
                     <ul className="font-semibold">
                         {languages.langNo && <li>{language.dictionary.norwegian}</li>}
                         {languages.langEn && <li>{language.dictionary.english}</li>}

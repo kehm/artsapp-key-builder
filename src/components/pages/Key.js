@@ -277,7 +277,7 @@ const Key = ({ onSetTitle }) => {
     };
 
     return (
-        <div className="py-14 px-4 lg:w-10/12 m-auto pb-28 lg:pb-2">
+        <div className="py-14 px-4 lg:w-10/12 m-auto pb-28">
             <BackButton onClick={() => history.goBack()} />
             {key && renderActionBar()}
             {error && <p className="text-red-600 mt-4">{error}</p>}

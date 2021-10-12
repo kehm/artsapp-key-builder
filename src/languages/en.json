@@ -263,5 +263,14 @@
     "noKeysInCollection": "There are no keys in this collection.",
     "selectTestRevision": "Select the revision that you want to test. This will take you to the ArtsApp Key Player application.",
     "headerTestKey": "Test key",
-    "warningChangeTaxon": "If you change the taxon relation of this taxon, all chosen characters for this taxon is reset and new characters are inherited from the new relation."
+    "warningChangeTaxon": "If you change the taxon relation of this taxon, all chosen characters for this taxon is reset and new characters are inherited from the new relation.",
+    "sectionChangeMode": "ArtsApp supports two modes for filtering characters and relevant taxa. If you choose to show all characters, ArtsApp will not hide taxa that are not relevant for a selected character. If you choose to hide irrelevant characters, taxa that do not have a value for the selected character will be hidden from view as soon as the character is selected. The standard mode is to hide irrelevant characters.",
+    "mode1": "The key shows all characters",
+    "mode2": "The key hides irrelevant characters",
+    "labelMode1": "Show all characters",
+    "labelMode2": "Hide irrelevant characters",
+    "labelMode": "Show/hide",
+    "change": "change",
+    "headerChangeMode": "Change mode",
+    "modeChangeEffect": "This change will take effect immediately. If the revision is published, this will also affect the published version of the key."
 }

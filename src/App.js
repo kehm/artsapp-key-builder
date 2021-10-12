@@ -20,7 +20,6 @@ import Key from './components/pages/Key';
 import Groups from './components/pages/Groups';
 import Workgroups from './components/pages/Workgroups';
 import ProgressIndicator from './components/components/ProgressIndicator';
-import Unauthorized from './components/pages/Unauthorized';
 import isPermitted from './utils/is-permitted';
 
 const App = () => {
@@ -117,7 +116,7 @@ const App = () => {
     if (user.authenticated) {
       if (!permission || isPermitted(user, [permission])) {
         return (
-          <div className="h-full md:ml-56 mb-10 md:mb-0 bg-white z-50 text-darkGrey">
+          <div className="h-full lg:ml-56 mb-10 md:mb-0 bg-white z-50 text-darkGrey">
             <Component onSetTitle={(title) => setPageTitle(title)} />
           </div>
         );
@@ -147,8 +146,8 @@ const App = () => {
                 <Route path="/edit/:keyId" exact component={() => renderPage(EditKeyInfo, 'EDIT_KEY_INFO')} />
                 <Route path="/groups" exact component={() => renderPage(Groups, 'BROWSE_GROUPS')} />
                 <Route path="/workgroups" exact component={() => renderPage(Workgroups, 'BROWSE_WORKGROUPS')} />
-                <Route path="/unauthorized" exact component={() => renderPage(Unauthorized)} />
-                <Route component={() => renderPage(NoMatch)} />
+                <Route path="/unauthorized" exact component={() => <NoMatch content={language.dictionary.unauthorized} />} />
+                <Route component={() => <NoMatch />} />
               </Switch>
             </ThemeProvider>
           </UserContext.Provider>
