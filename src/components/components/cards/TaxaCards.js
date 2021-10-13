@@ -16,6 +16,7 @@ import Switch from '@material-ui/core/Switch';
 import Checkbox from '@material-ui/core/Checkbox';
 import LanguageContext from '../../../context/LanguageContext';
 import { findName } from '../../../utils/translation';
+import ListAvatar from '../ListAvatar';
 
 /**
  * Render taxa cards
@@ -181,13 +182,11 @@ const TaxaCards = ({
         <Card key={taxon.id} variant="outlined">
             <div className="relative p-2">
                 <div className="absolute left-3 hidden lg:inline">
-                    {taxon.media && taxon.media.length > 0
-                        ? <Avatar className="ml-4" alt="State" src={`${process.env.REACT_APP_BUILDER_API_URL}/media/thumbnails/${taxon.media[0]}`} />
-                        : (
-                            <Avatar className="ml-4">
-                                <ImageIcon />
-                            </Avatar>
-                        )}
+                    <ListAvatar
+                        media={taxon.media}
+                        alt="State"
+                        rightAlign
+                    />
                 </div>
                 <span className="lg:ml-20">
                     <FormControlLabel

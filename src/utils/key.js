@@ -54,6 +54,18 @@ export const getKeyLanguages = (languages) => {
 };
 
 /**
+ * Get key title
+ *
+ * @param {Object} key Key
+ * @returns {string} Key title
+ */
+export const getKeyTitle = (key) => {
+    if (key.key_info) return key.key_info.title;
+    if (key.artsapp_key) return key.artsapp_key.key_info.title;
+    return undefined;
+};
+
+/**
  * Get revisions, collections, groups and organizations for a key
  *
  * @param {string} keyId Key ID

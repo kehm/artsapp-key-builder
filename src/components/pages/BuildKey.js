@@ -51,56 +51,54 @@ const BuildKey = ({ onSetTitle }) => {
     const [changesSaved, setChangesSaved] = useState(true);
     const [showUnsavedDialog, setShowUnsavedDialog] = useState(false);
     const [showProgress, setShowProgress] = useState(true);
-    const [openChangeMode, setOpenChangeMode] = useState(false);
     const [languages, setLanguages] = useState({
         langNo: false,
         langEn: false,
     });
 
     /**
+     * Get key revision from API
+     */
+    const getKeyRevision = async () => {
+        try {
+            onSetTitle(language.dictionary.buildKey);
+            const rev = await getRevision(revisionId);
+            const key = await getKey(rev.keyId);
+            setRevision(rev);
+            setLanguages({
+                langNo: key.languages.includes('no'),
+                langEn: key.languages.includes('en'),
+            });
+            if (rev.content) {
+                if (rev.content.taxa && rev.content.taxa.length > 0) {
+                    const switches = {};
+                    rev.content.taxa.forEach((taxon) => { switches[taxon.id] = -1; });
+                    setTaxa(rev.content.taxa);
+                    if (!selectedTaxon) setSelectedTaxon(rev.content.taxa[0]);
+                }
+                if (rev.content.characters && rev.content.characters.length > 0) {
+                    const switches = {};
+                    rev.content.characters.forEach((character) => { switches[character.id] = -1; });
+                    setCharacters(rev.content.characters);
+                    if (!selectedCharacter) setSelectedCharacter(rev.content.characters[0]);
+                }
+                if (changesSaved && rev.content.statements) {
+                    setStatements(rev.content.statements);
+                } else setStatements(statements);
+            }
+        } catch (err) {
+            setError(language.dictionary.internalAPIError);
+        } finally {
+            setShowProgress(false);
+        }
+    };
+
+    /**
      * Get revision from API
      */
     useEffect(() => {
-        if (!revision) {
-            onSetTitle(language.dictionary.buildKey);
-            getRevision(revisionId).then((rev) => {
-                getKey(rev.keyId).then((key) => {
-                    setLanguages({
-                        langNo: key.languages.includes('no'),
-                        langEn: key.languages.includes('en'),
-                    });
-                    setShowProgress(false);
-                }).catch(() => setError(language.dictionary.internalAPIError));
-                setRevision(rev);
-                if (rev.content) {
-                    if (rev.content.taxa && rev.content.taxa.length > 0) {
-                        const switches = {};
-                        rev.content.taxa.forEach((taxon) => {
-                            switches[taxon.id] = -1;
-                        });
-                        setTaxa(rev.content.taxa);
-                        if (!selectedTaxon) setSelectedTaxon(rev.content.taxa[0]);
-                    }
-                    if (rev.content.characters && rev.content.characters.length > 0) {
-                        const switches = {};
-                        rev.content.characters.forEach((character) => {
-                            switches[character.id] = -1;
-                        });
-                        setCharacters(rev.content.characters);
-                        if (!selectedCharacter) {
-                            setSelectedCharacter(rev.content.characters[0]);
-                        }
-                    }
-                    if (changesSaved && rev.content.statements) {
-                        setStatements(rev.content.statements);
-                    } else setStatements(statements);
-                }
-            }).catch(() => {
-                setError(language.dictionary.internalAPIError);
-                setShowProgress(false);
-            });
-        }
-    }, [revisionId, revision, language]);
+        if (!revision) getKeyRevision();
+    }, [revisionId, revision]);
 
     /**
      * Set correct switches and checkboxes on selecting a new taxon
@@ -415,7 +413,9 @@ const BuildKey = ({ onSetTitle }) => {
                     disabled={!changesSaved}
                 >
                     <span className="xl:hidden">{language.dictionary.headerChangeStatus}</span>
-                    <span className="hidden xl:inline">{`${language.dictionary.headerChangeStatus} ${revision ? `(${findRevisionStatusName(revision.status, language)})` : ''}`}</span>
+                    <span className="hidden xl:inline">
+                        {`${language.dictionary.headerChangeStatus} ${revision ? `(${findRevisionStatusName(revision.status, language)})` : ''}`}
+                    </span>
                 </Button>
             </span>
             <span className="xl:absolute right-0 ml-4">
@@ -490,7 +490,7 @@ const BuildKey = ({ onSetTitle }) => {
                     revision={revision}
                     openDialog={openModal.open === 'MODE'}
                     onClose={() => setOpenModal({ open: undefined, id: undefined })}
-                    onChanged={() => setRevision(undefined)}
+                    onCreated={(id) => handleCreated(id)}
                 />
             )}
             <UnsavedChanges

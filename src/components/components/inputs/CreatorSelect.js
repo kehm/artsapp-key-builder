@@ -30,7 +30,14 @@ const CreatorSelect = ({ creators, onChange, onClickNew }) => {
                 renderInput={(params) => <TextField {...params} label={language.dictionary.labelCreators} variant="outlined" />}
             />
             <span className="flex-1 ml-4">
-                <Button variant="contained" color="default" size="medium" endIcon={<Add />} type="button" onClick={() => onClickNew()}>
+                <Button
+                    variant="contained"
+                    color="default"
+                    size="medium"
+                    endIcon={<Add />}
+                    type="button"
+                    onClick={() => onClickNew()}
+                >
                     {language.dictionary.btnNew}
                 </Button>
             </span>

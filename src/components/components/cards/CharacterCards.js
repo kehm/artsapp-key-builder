@@ -3,8 +3,6 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
-import Avatar from '@material-ui/core/Avatar';
-import ImageIcon from '@material-ui/icons/Image';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import EditOutlined from '@material-ui/icons/EditOutlined';
 import IconButton from '@material-ui/core/IconButton';
@@ -21,6 +19,7 @@ import CreatePremises from '../../dialogs/CreatePremises';
 import LanguageContext from '../../../context/LanguageContext';
 import { findParentTaxa, findSubTaxa } from '../../../utils/taxon';
 import { findName } from '../../../utils/translation';
+import ListAvatar from '../ListAvatar';
 
 /**
  * Render character cards
@@ -98,17 +97,6 @@ const CharacterCards = ({
      */
     const handleAlternativeCheck = (stateId, character, uncheck) => {
         let arr = [...statements];
-        /*
-          if (character.type.toUpperCase() === 'EXCLUSIVE') {
-              const obj = arr.find(
-                  (element) => element.taxonId === taxon.id && element.characterId === character.id,
-              );
-              if (obj) {
-                  obj.value = stateId;
-                  setSwitches({ ...switches, [character.id]: 0 });
-              }
-          } else if (character.type.toUpperCase() === 'MULTISTATE') {
-              */
         if (uncheck) {
             if (arr.filter(
                 (element) => element.taxonId === taxon.id
@@ -127,7 +115,6 @@ const CharacterCards = ({
             arr.push({ taxonId: taxon.id, characterId: character.id, value: stateId });
             setSwitches({ ...switches, [character.id]: 0 });
         }
-        // }
         onStateChange(arr);
     };
 
@@ -175,13 +162,11 @@ const CharacterCards = ({
                 <ListItemText primary={findName(state.title, language.language.split('_')[0]) || language.dictionary.unknown} />
                 <ListItemSecondaryAction>
                     <ListItemAvatar className="hidden lg:inline">
-                        {state.media && state.media.length > 0
-                            ? <Avatar className="ml-4" alt="State" src={`${process.env.REACT_APP_BUILDER_API_URL}/media/thumbnails/${state.media[0]}`} />
-                            : (
-                                <Avatar className="ml-4">
-                                    <ImageIcon />
-                                </Avatar>
-                            )}
+                        <ListAvatar
+                            media={state.media}
+                            alt="State"
+                            rightAlign
+                        />
                     </ListItemAvatar>
                 </ListItemSecondaryAction>
             </ListItem>
@@ -232,13 +217,11 @@ const CharacterCards = ({
         <Card key={character.id} variant="outlined">
             <div className="relative p-2">
                 <div className="absolute left-3 hidden lg:inline">
-                    {character.media && character.media.length > 0
-                        ? <Avatar className="ml-4" alt="State" src={`${process.env.REACT_APP_BUILDER_API_URL}/media/thumbnails/${character.media[0]}`} />
-                        : (
-                            <Avatar className="ml-4">
-                                <ImageIcon />
-                            </Avatar>
-                        )}
+                    <ListAvatar
+                        media={character.media}
+                        alt="State"
+                        rightAlign
+                    />
                 </div>
                 <span className="lg:ml-20">
                     <FormControlLabel

@@ -6,8 +6,7 @@ import TreeItem from '@material-ui/lab/TreeItem';
 import EditOutlined from '@material-ui/icons/EditOutlined';
 import ListOutlined from '@material-ui/icons/ListOutlined';
 import IconButton from '@material-ui/core/IconButton';
-import Avatar from '@material-ui/core/Avatar';
-import ImageIcon from '@material-ui/icons/Image';
+import ListAvatar from '../ListAvatar';
 
 /**
  * Render key group list
@@ -35,19 +34,10 @@ const KeyGroupList = ({
      */
     const renderLabel = (group) => (
         <div className="p-4 w-96 flex items-center">
-            {group.media && group.media.length > 0
-                ? (
-                    <Avatar
-                        className="mr-4"
-                        alt="Group"
-                        src={`${process.env.REACT_APP_BUILDER_API_URL}/media/thumbnails/${group.media[0].mediaid}`}
-                    />
-                )
-                : (
-                    <Avatar className="mr-4">
-                        <ImageIcon />
-                    </Avatar>
-                )}
+            <ListAvatar
+                media={group.media}
+                alt="Group"
+            />
             <span className="overflow-hidden overflow-ellipsis whitespace-nowrap w-44">{group.name}</span>
             <span className="absolute right-16 top-3">
                 <IconButton

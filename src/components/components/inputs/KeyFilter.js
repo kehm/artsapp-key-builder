@@ -15,7 +15,6 @@ const KeyFilter = ({ filter, onChangeFilter }) => {
             <div className="border border-solid rounded pl-4 py-2 w-80">
                 <span className="font-semibold">
                     {language.dictionary.labelFilterCategory}
-                    :
                 </span>
                 <RadioGroup
                     aria-label="key type"
@@ -32,7 +31,6 @@ const KeyFilter = ({ filter, onChangeFilter }) => {
             <div className="border border-solid rounded pl-8 py-2 w-96">
                 <span className="font-semibold">
                     {language.dictionary.labelFilterLanguage}
-                    :
                 </span>
                 <RadioGroup
                     aria-label="key type"

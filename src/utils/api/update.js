@@ -48,13 +48,13 @@ export const updateRevisionStatus = async (revisionId, data) => {
 };
 
 /**
- * Update revision mode
+ * Change revision key mode
  *
  * @param {string} revisionId Revision ID
  * @param {Object} data Object with mode and key ID
  * @returns {Object} Response data
  */
-export const updateRevisionMode = async (revisionId, data) => {
+export const changeMode = async (revisionId, data) => {
     const response = await axios.put(
         `${process.env.REACT_APP_BUILDER_API_URL}/revisions/mode/${revisionId}`,
         data,

@@ -5,14 +5,13 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import EditOutlined from '@material-ui/icons/EditOutlined';
 import IconButton from '@material-ui/core/IconButton';
-import Avatar from '@material-ui/core/Avatar';
-import ImageIcon from '@material-ui/icons/Image';
 import ArrowDropUp from '@material-ui/icons/ArrowDropUp';
 import ArrowDropDown from '@material-ui/icons/ArrowDropDown';
 import LanguageContext from '../../../context/LanguageContext';
 import { findName } from '../../../utils/translation';
 import getInputChange from '../../../utils/input-change';
 import TextInput from '../inputs/TextInput';
+import ListAvatar from '../ListAvatar';
 
 /**
  * Render character list
@@ -54,13 +53,10 @@ const CharacterList = ({
             onClick={() => onSelectCharacter(character)}
         >
             <span className="hidden lg:inline">
-                {character.media && character.media.length > 0
-                    ? <Avatar className="mr-4" alt="State" src={`${process.env.REACT_APP_BUILDER_API_URL}/media/thumbnails/${character.media[0]}`} />
-                    : (
-                        <Avatar className="mr-4">
-                            <ImageIcon />
-                        </Avatar>
-                    )}
+                <ListAvatar
+                    media={character.media}
+                    alt="State"
+                />
             </span>
             <div className="absolute right-10">
                 {selectedCharacter

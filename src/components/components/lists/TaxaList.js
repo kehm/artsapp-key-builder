@@ -7,12 +7,11 @@ import Stop from '@material-ui/icons/Stop';
 import TreeItem from '@material-ui/lab/TreeItem';
 import EditOutlined from '@material-ui/icons/EditOutlined';
 import IconButton from '@material-ui/core/IconButton';
-import Avatar from '@material-ui/core/Avatar';
-import ImageIcon from '@material-ui/icons/Image';
 import LanguageContext from '../../../context/LanguageContext';
 import { findTaxa } from '../../../utils/taxon';
 import getInputChange from '../../../utils/input-change';
 import TextInput from '../inputs/TextInput';
+import ListAvatar from '../ListAvatar';
 
 /**
  * Render taxa list
@@ -51,16 +50,15 @@ const TaxaList = ({
     const renderLabel = (type, taxon) => (
         <div className={type === 'list' ? 'p-2 w-96 h-16 flex' : 'p-4 w-96 flex'}>
             <span className="hidden lg:inline">
-                {taxon.media && taxon.media.length > 0
-                    ? <Avatar className="mr-4" alt="Taxon" src={`${process.env.REACT_APP_BUILDER_API_URL}/media/thumbnails/${taxon.media[0]}`} />
-                    : (
-                        <Avatar className="mr-4">
-                            <ImageIcon />
-                        </Avatar>
-                    )}
+                <ListAvatar
+                    media={taxon.media}
+                    alt="Taxon"
+                />
             </span>
             <ul>
-                <li className="overflow-hidden overflow-ellipsis whitespace-nowrap w-40 xl:w-60">{taxon.scientificName}</li>
+                <li className="overflow-hidden overflow-ellipsis whitespace-nowrap w-40 xl:w-60">
+                    {taxon.scientificName}
+                </li>
                 <li className="text-gray-500 text-sm ml-1 overflow-hidden overflow-ellipsis whitespace-nowrap w-40 xl:w-60">
                     {taxon.vernacularName && taxon.vernacularName[language.language.split('_')[0]]
                         ? taxon.vernacularName[language.language.split('_')[0]]
@@ -101,7 +99,8 @@ const TaxaList = ({
     const renderListItem = (taxon) => (
         <ListItem
             key={taxon.id}
-            className={selectedTaxon && selectedTaxon.id === taxon.id ? 'bg-blue-200 rounded mt-4 cursor-pointer' : 'rounded mt-4 cursor-pointer'}
+            className={selectedTaxon && selectedTaxon.id === taxon.id
+                ? 'bg-blue-200 rounded mt-4 cursor-pointer' : 'rounded mt-4 cursor-pointer'}
             onClick={() => onSelectTaxon(taxon)}
         >
             {renderLabel('list', taxon)}

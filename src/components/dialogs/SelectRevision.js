@@ -1,90 +1,75 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import Button from '@material-ui/core/Button';
+import DialogContent from '@material-ui/core/DialogContent';
 import LanguageContext from '../../context/LanguageContext';
 import RevisionList from '../components/lists/RevisionList';
+import CloseButton from '../components/buttons/CloseButton';
 
 /**
  * Render select revision dialog
  */
-const SelectRevision = ({
-    revisions, selected, selectLatest, onBuildKey, onShowPrevious, onSelect, onClose, error,
-}) => {
+const SelectRevision = ({ revisions, onSelect, onClose }) => {
     const { language } = useContext(LanguageContext);
+    const [showAll, setShowAll] = useState(false);
 
-    if (selectLatest) {
-        return (
-            <>
-                <p className="px-4 pt-6">{language.dictionary.selectLatestRevision}</p>
-                <div className="flex m-auto py-6">
-                    <span className="mr-4">
-                        <Button
-                            variant="contained"
-                            color="secondary"
-                            size="medium"
-                            type="button"
-                            onClick={() => onBuildKey()}
-                        >
-                            {language.dictionary.btnSelectLatest}
-                        </Button>
-                    </span>
-                    <span className="mr-4">
-                        <Button
-                            variant="contained"
-                            color="default"
-                            size="medium"
-                            type="button"
-                            onClick={() => onShowPrevious()}
-                        >
-                            {language.dictionary.btnShowAll}
-                        </Button>
-                    </span>
-                    <Button
-                        variant="contained"
-                        color="default"
-                        size="medium"
-                        type="button"
-                        onClick={() => onClose()}
-                    >
-                        {language.dictionary.btnCancel}
-                    </Button>
-                </div>
-                {error && <p className="text-red-600 mb-4">{error}</p>}
-            </>
-        );
-    }
-    return (
-        <>
-            <p className="px-4 pt-6">{language.dictionary.selectRevisionInfo}</p>
-            <RevisionList
-                revisions={revisions}
-                selectable
-                onClickListItem={(revision) => onSelect(revision)}
-            />
-            <div className="flex m-auto pb-6">
-                <span className="mr-4">
-                    <Button
-                        variant="contained"
-                        color="secondary"
-                        size="medium"
-                        type="button"
-                        onClick={() => onBuildKey()}
-                        disabled={!selected}
-                    >
-                        {language.dictionary.btnSelectRevision}
-                    </Button>
-                </span>
+    /**
+     * Render action buttons
+     *
+     * @returns JSX
+     */
+    const renderActions = () => (
+        <div className="flex m-auto py-6 es:ml-12">
+            <span className="mr-4">
+                <Button
+                    variant="contained"
+                    color="secondary"
+                    size="medium"
+                    type="button"
+                    onClick={() => onSelect()}
+                >
+                    {language.dictionary.btnSelectLatest}
+                </Button>
+            </span>
+            <span className="mr-4">
                 <Button
                     variant="contained"
                     color="default"
                     size="medium"
                     type="button"
-                    onClick={() => onClose()}
+                    onClick={() => setShowAll(true)}
                 >
-                    {language.dictionary.btnCancel}
+                    {language.dictionary.btnShowAll}
                 </Button>
-            </div>
-            {error && <p className="text-red-600 mb-4">{error}</p>}
-        </>
+            </span>
+            <Button
+                variant="contained"
+                color="default"
+                size="medium"
+                type="button"
+                onClick={() => onClose()}
+            >
+                {language.dictionary.btnCancel}
+            </Button>
+        </div>
+    );
+
+    if (!showAll) {
+        return (
+            <DialogContent>
+                <p className="px-4 pt-2">{language.dictionary.selectLatestRevision}</p>
+                {renderActions()}
+            </DialogContent>
+        );
+    }
+    return (
+        <DialogContent>
+            <CloseButton onClick={() => onClose()} />
+            <p className="px-4 pt-2">{language.dictionary.selectRevisionInfo}</p>
+            <RevisionList
+                revisions={revisions}
+                onClickListItem={(revision) => onSelect(revision)}
+            />
+        </DialogContent>
     );
 };
 

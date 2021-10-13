@@ -139,7 +139,6 @@ const FileDrop = ({
                             <div hidden={files.length === 0}>
                                 <h3 className={`font-semibold mb-2 ${size === 'small' && '-ml-6'}`}>
                                     {language.dictionary.selectedFiles}
-                                    :
                                 </h3>
                                 <ul className={`list-disc ${size !== 'small' && 'ml-10'}`}>
                                     {files.map((file, index) => renderFileItem(file, index, false))}
@@ -148,7 +147,6 @@ const FileDrop = ({
                             <div className="mt-10" hidden={!existingFiles || existingFiles.length === 0}>
                                 <h3 className={`font-semibold mb-2 ${size === 'small' && '-ml-6'}`}>
                                     {language.dictionary.existingFiles}
-                                    :
                                 </h3>
                                 <ul className={`list-disc ${size !== 'small' && 'ml-10'}`}>
                                     {existingFiles && existingFiles.map(

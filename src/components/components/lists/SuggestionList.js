@@ -15,7 +15,11 @@ const SuggestionList = ({ suggestions, onClickListItem }) => {
             <List>
                 <p className="mb-4 font-semibold">{language.dictionary.headerSuggestions}</p>
                 {suggestions.map((suggestion, index) => (
-                    <ListItem key={index} className="mt-4 cursor-pointer" onClick={() => onClickListItem(suggestion)}>
+                    <ListItem
+                        key={index}
+                        className="mt-4 cursor-pointer"
+                        onClick={() => onClickListItem(suggestion)}
+                    >
                         <ListItemText primary={suggestion} />
                     </ListItem>
                 ))}

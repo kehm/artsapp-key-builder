@@ -30,7 +30,6 @@ const LanguageSwitches = ({ switches, onSwitchUpdate }) => {
         <FormControl>
             <FormLabel component="legend" className="mb-2">
                 {language.dictionary.selectLanguages}
-                :
             </FormLabel>
             <FormGroup row>
                 <FormControlLabel

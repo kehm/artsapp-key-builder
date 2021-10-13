@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import SaveOutlined from '@material-ui/icons/SaveOutlined';
 import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
@@ -11,40 +11,56 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import LanguageContext from '../../context/LanguageContext';
 import CloseButton from '../components/buttons/CloseButton';
-import { updateRevisionMode } from '../../utils/api/update';
+import { changeMode } from '../../utils/api/update';
+import ProgressIndicator from '../components/ProgressIndicator';
 
 /**
  * Render set revision status dialog
  */
 const SetRevisionMode = ({
-    openDialog, currentMode, revision, onClose, onChanged,
+    openDialog, currentMode, revision, onClose, onCreated,
 }) => {
     const { language } = useContext(LanguageContext);
     const [mode, setMode] = useState(currentMode);
     const [error, setError] = useState(undefined);
+    const [showProgress, setShowProgress] = useState(false);
     const status = [
         { value: 1, label: language.dictionary.labelMode1 },
         { value: 2, label: language.dictionary.labelMode2 },
     ];
 
     /**
+     * Create new revision
+     */
+    const submit = async () => {
+        try {
+            const revisionId = await changeMode(revision.id, {
+                keyId: revision.keyId,
+                mode,
+            });
+            onCreated(revisionId);
+            onClose();
+        } catch (err) {
+            setError(language.dictionary.internalAPIError);
+        }
+    };
+
+    /**
+     * Submit to API on progress
+     */
+    useEffect(() => {
+        if (showProgress) submit();
+    }, [showProgress]);
+
+    /**
      * Handle change mode
      *
      * @param {Object} e Event
      */
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         if (mode !== currentMode) {
-            try {
-                await updateRevisionMode(revision.id, {
-                    keyId: revision.keyId,
-                    mode,
-                });
-                onChanged();
-                onClose();
-            } catch (err) {
-                setError(language.dictionary.internalAPIError);
-            }
+            setShowProgress(true);
         } else onClose();
     };
 
@@ -81,7 +97,6 @@ const SetRevisionMode = ({
                             ))}
                         </Select>
                     </FormControl>
-                    <p className="mb-8">{language.dictionary.modeChangeEffect}</p>
                     {error && <p className="text-red-600 mb-4">{error}</p>}
                 </DialogContent>
                 <DialogActions>
@@ -96,6 +111,7 @@ const SetRevisionMode = ({
                     </Button>
                 </DialogActions>
             </form>
+            <ProgressIndicator open={showProgress} />
         </Dialog>
     );
 };

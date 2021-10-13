@@ -63,7 +63,7 @@ const BottomNav = () => {
     };
 
     return (
-        <div className="fixed w-full bottom-0 md:hidden z-10">
+        <div className="fixed w-full bottom-0 lg:hidden z-10">
             {user.authenticated && (
                 <BottomNavigation
                     value={selected}

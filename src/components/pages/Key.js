@@ -34,11 +34,8 @@ const Key = ({ onSetTitle }) => {
     const [revisions, setRevisions] = useState(undefined);
     const [workgroups, setWorkgroups] = useState(undefined);
     const [error, setError] = useState(undefined);
-    const [errorDialog, setErrorDialog] = useState(undefined);
     const [openEditDialog, setOpenEditDialog] = useState(false);
     const [selectedLanguage, setSelectedLanguage] = useState(undefined);
-    const [latestRevision, setLatestRevision] = useState(true);
-    const [selectedRevision, setSelectedRevision] = useState(undefined);
     const [openShareDialog, setOpenShareDialog] = useState(false);
     const [openTestDialog, setOpenTestDialog] = useState(false);
     const [tab, setTab] = useState(0);
@@ -91,21 +88,11 @@ const Key = ({ onSetTitle }) => {
     }, [workgroups]);
 
     /**
-     * Reset error message and latest flag on dialog exit
-     */
-    useEffect(() => {
-        if (!openEditDialog) {
-            setLatestRevision(true);
-            setErrorDialog(false);
-        }
-    }, [openEditDialog]);
-
-    /**
      * Go to edit page
      */
-    const handleBuildKey = async () => {
-        if (selectedRevision) {
-            history.push(`/build/${selectedRevision.id}`);
+    const handleBuildKey = async (revision) => {
+        if (revision) {
+            history.push(`/build/${revision.id}`);
         } else history.push(`/build/${revisions[0].id}`);
     };
 
@@ -276,28 +263,32 @@ const Key = ({ onSetTitle }) => {
         );
     };
 
+    /**
+     * Render select revision dialog
+     *
+     * @returns JSX
+     */
+    const renderRevisionDialog = () => (
+        <Dialog
+            className="text-center"
+            onClose={() => setOpenEditDialog(false)}
+            open={openEditDialog}
+        >
+            <SelectRevision
+                revisions={revisions}
+                onSelect={(revision) => handleBuildKey(revision)}
+                onClose={() => setOpenEditDialog(false)}
+            />
+        </Dialog>
+    );
+
     return (
         <div className="py-14 px-4 lg:w-10/12 m-auto pb-28">
             <BackButton onClick={() => history.goBack()} />
             {key && renderActionBar()}
             {error && <p className="text-red-600 mt-4">{error}</p>}
             {key && renderKeyDetails()}
-            <Dialog
-                className="text-center"
-                onClose={() => setOpenEditDialog(false)}
-                open={openEditDialog}
-            >
-                <SelectRevision
-                    revisions={revisions}
-                    selected={selectedRevision}
-                    selectLatest={latestRevision}
-                    onBuildKey={() => handleBuildKey()}
-                    onShowPrevious={() => setLatestRevision(false)}
-                    onSelect={(revision) => setSelectedRevision(revision)}
-                    onClose={() => setOpenEditDialog(false)}
-                    error={errorDialog}
-                />
-            </Dialog>
+            {renderRevisionDialog()}
             {openShareDialog && (
                 <ShareKey
                     openDialog={openShareDialog}

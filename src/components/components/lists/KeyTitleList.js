@@ -5,6 +5,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import CancelOutlined from '@material-ui/icons/CancelOutlined';
 import IconButton from '@material-ui/core/IconButton';
+import { getKeyTitle } from '../../../utils/key';
 
 /**
  * Render key title list
@@ -16,11 +17,7 @@ const KeyTitleList = ({ keys, showActions, onRemove }) => (
                 key={key.id}
                 className="mt-4"
             >
-                <ListItemText
-                    primary={key.key_info
-                        ? key.key_info.title : key.artsapp_key
-                            ? key.artsapp_key.key_info.title : ''}
-                />
+                <ListItemText primary={getKeyTitle(key)} />
                 {showActions && (
                     <ListItemSecondaryAction>
                         <IconButton
