@@ -4,8 +4,7 @@
     "btnNewKey": "Ny nøkkel",
     "btnNext": "Neste",
     "btnPrev": "Forrige",
-    "btnSortCharacters": "Sorter etter karakterer",
-    "btnSortTaxa": "Sorter etter takson",
+    "btnSwitchLists": "Bytt lister",
     "btnSaveChanges": "Lagre endringer",
     "btnSave": "Lagre",
     "btnAdd": "Legg til",
@@ -59,7 +58,7 @@
     "sectionCreateKey": "Fyll ut feltene under for å opprette en ny nøkkel. Nøkkelens navn kan ha maks. 60 tegn. Den nye nøkkelen vil være synlig for alle brukere av ArtsApp Nøkkelbygger, men du velger selv hvem som skal ha tilgang til å jobbe med den. Nøkkelen vil ikke publiseres i ArtsApp før den er blitt godkjent. Klikk på Hjelp-ikonet i høyre hjørne av siden for mer informasjon.",
     "sectionEditKey": "Kontroller at status og gjeldende revisjon er korrekt før du lagrer endringene dine. Nøkkelens versjonsnavn (maks. 30 tegn) vil være synlig for sluttbruker i ArtsApp når nøkkelen publiseres.",
     "sectionKeyInfo": "<p>Gå til \"Rediger informasjon\" for å endre nøkkelens tittel, beskrivelse, bilde, samling/gruppe, informasjon om opphavsrett eller for å endre nøkkelens publiseringsstatus. For å endre på selve innholdet i nøkkelen går du til \"Rediger nøkkel\".</p>",
-    "sectionBuildKey": "<p>Begynn med å legge til takson og karakterer for nøkkelen. Deretter kobler du takson med relevante karakterer og setter de nødvendige kriteriene. Du kan velge om du vil at listen skal sortere etter takson eller karakterer ved å trykke på \"Sorter etter\"-knappen. For å endre rekkefølgen karakterene vises i må du først velge sortering etter karakterer og deretter justere rekkefølgen av karakterer i listen ved bruk av pilene.</p><br/><p>Klikk på et takson eller en karakter for å se koblinger. Premissene for når en karakter skal vises setter du ved å klikke på rutenett-ikonet på karakterkortet (velg først å sortere etter takson).</p><br/><p>Når du lagrer endringer opprettes det en ny revisjon av nøkkelen. Alle revisjoner blir tatt vare på og lagret i nøkkelbyggeren, slik at du eller andre kan jobbe videre på nøkkelen fra enhver gitt revisjon.</p><br/><p>Når endringene dine er lagret og du mener at revisjonen er klar til gjennomgang klikker du på \"Status\"-knappen og endrer revisjonens status.</p>",
+    "sectionBuildKey": "<p>Begynn med å legge til takson og karakterer for nøkkelen. Deretter kobler du takson med relevante karakterer og setter de nødvendige kriteriene. Du kan velge om du vil at listen skal sortere etter takson eller karakterer ved å trykke på \"Sorter etter\"-knappen. For å endre rekkefølgen karakterene vises i må du først velge sortering etter karakterer og deretter justere rekkefølgen av karakterer i listen ved bruk av pilene.</p><br/><p>Klikk på et takson eller en karakter for å se koblinger. Premissene for når en karakter skal vises setter du ved å klikke på rutenett-ikonet på karakterkortet (velg først å sortere etter takson).</p><br/><p>Husk å lagre endringene dine! Dersom \"Lagre endringer\"-knappen er aktiv betyr det at du har ulagrede endringer. Når du lagrer endringer opprettes det en ny revisjon av nøkkelen. Alle revisjoner blir tatt vare på og lagret i nøkkelbyggeren, slik at du eller andre kan jobbe videre på nøkkelen fra enhver gitt revisjon.</p><br/><p>Når endringene dine er lagret og du mener at revisjonen er klar til gjennomgang klikker du på \"Status\"-knappen og endrer revisjonens status.</p>",
     "sectionShareIndividual": "Del nøkkelen med en annen bruker ved å legge til brukerens e-postadresse.",
     "sectionShareOverview": "Her er en oversikt over brukere som allerede har fått tilgang til nøkkelen.",
     "sectionNewTaxon": "Gi navn (maks. 120 tegn) og lag en beskrivelse for taksonet.",
@@ -90,7 +89,6 @@
     "sectionContributors": "Alle som har bidratt i utviklingen av nøkkelen skal legges til i listen over bidragsytere. Dette kan også inkludere personer som har bidratt til nøkkelen utenfor nøkkelbygger-programvaren. Informer alltid personene du legger til om at du har lagt dem til. Denne listen er offentlig.",
     "sectionContributorsNot": "Du trenger ikke å legge til samme bruker i både eier- og bidragsyter-listen. Navnet kan ha maks. 60 tegn.",
     "sectionCreators": "Eiere av nøkkelen skal legges til i denne listen. Informer alltid personene du legger til om at du har lagt dem til. Denne listen er offentlig.",
-    "rememberSave": "Husk å lagre endringene dine! Dersom \"Lagre endringer\"-knappen er aktiv betyr det at du har ulagrede endringer. Les informasjonen i \"Hjelp\"-menyen før du går i gang med nøkkelbyggingen.",
     "created": "Opprettet:",
     "updated": "oppdatert",
     "labelKeyName": "Nøkkelens navn",
@@ -241,6 +239,5 @@
     "labelMode1": "Vis alle karakterer (enkel)",
     "labelMode2": "Skjul urelevante karakterer (avansert)",
     "labelMode": "Vis/skjul",
-    "change": "endre",
     "headerChangeMode": "Endre innstilling"
 }

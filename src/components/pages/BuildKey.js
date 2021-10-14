@@ -1,14 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useHistory } from 'react-router';
-import Flip from '@material-ui/icons/Flip';
-import Button from '@material-ui/core/Button';
-import Add from '@material-ui/icons/Add';
-import FlagOutlined from '@material-ui/icons/FlagOutlined';
-import SaveOutlined from '@material-ui/icons/SaveOutlined';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
 import LanguageContext from '../../context/LanguageContext';
 import { createRevision } from '../../utils/api/create';
 import { getKey, getRevision } from '../../utils/api/get';
@@ -23,11 +15,12 @@ import CreateRevisionNote from '../dialogs/CreateRevisionNote';
 import BackButton from '../components/buttons/BackButton';
 import { findParentTaxa, findTaxa, findTaxon } from '../../utils/taxon';
 import SetRevisionStatus from '../dialogs/SetRevisionStatus';
-import { findRevisionStatusName } from '../../utils/translation';
 import ProgressIndicator from '../components/ProgressIndicator';
 import { removeCharacterPremises } from '../../utils/character';
-import ActionButton from '../components/buttons/ActionButton';
 import SetRevisionMode from '../dialogs/SetRevisionMode';
+import AddButton from '../components/buttons/AddButton';
+import CharacterFilter from '../components/inputs/CharacterFilter';
+import BuildKeyActionBar from '../components/buttons/BuildKeyActionBar';
 
 /**
  * Render build key page
@@ -281,35 +274,12 @@ const BuildKey = ({ onSetTitle }) => {
     };
 
     /**
-      * Render taxon character filter
-      *
-      * @returns JSX
-      */
-    const renderTaxonCharacterFilter = () => (
-        <RadioGroup
-            aria-label="character type"
-            name="characterType"
-            value={filterTaxonCharacters}
-            onChange={(e) => setFilterTaxonCharacters(e.target.value)}
-        >
-            <div className="xl:flex my-6">
-                <span className="mt-2 mr-6 font-semibold">
-                    {language.dictionary.show}
-                </span>
-                <FormControlLabel value="ALL" control={<Radio />} label={language.dictionary.all} />
-                <FormControlLabel value="CATEGORICAL" control={<Radio />} label={language.dictionary.categorical} />
-                <FormControlLabel value="NUMERICAL" control={<Radio />} label={language.dictionary.numerical} />
-            </div>
-        </RadioGroup>
-    );
-
-    /**
      * Render taxa/character lists
      *
      * @returns JSX
      */
     const renderLists = () => (
-        <div className="grid grid-cols-2">
+        <div className="grid grid-cols-2 h-full pb-16 lg:pb-2">
             {sortByCharacters ? (
                 <>
                     <CharacterList
@@ -318,10 +288,18 @@ const BuildKey = ({ onSetTitle }) => {
                         onSelectCharacter={(character) => setSelectedCharacter(character)}
                         onEditCharacter={(id) => setOpenModal({ open: 'CHARACTERS', id })}
                         onMoveCharacter={(id, direction) => moveCharacter(id, direction)}
+                        onClickAdd={() => setOpenModal({ open: 'CHARACTERS', id: undefined })}
+                        onChangeSort={() => setSortByCharacters(!sortByCharacters)}
                     />
                     {taxa && selectedCharacter ? (
-                        <div className="overflow-auto">
-                            <h2 className="mb-24">{language.dictionary.labelTaxa}</h2>
+                        <div className="h-full overflow-hidden pb-36">
+                            <div className="pb-20">
+                                <AddButton
+                                    label={language.dictionary.labelTaxa}
+                                    onClick={() => setOpenModal({ open: 'TAXA', id: undefined })}
+                                />
+                            </div>
+                            <hr />
                             <TaxaCards
                                 taxa={findTaxa(taxa)}
                                 character={selectedCharacter}
@@ -343,11 +321,20 @@ const BuildKey = ({ onSetTitle }) => {
                         selectedTaxon={selectedTaxon}
                         onSelectTaxon={(taxon) => setSelectedTaxon(taxon)}
                         onEditTaxon={(id) => setOpenModal({ open: 'TAXA', id })}
+                        onClickAdd={() => setOpenModal({ open: 'TAXA', id: undefined })}
+                        onChangeSort={() => setSortByCharacters(!sortByCharacters)}
                     />
                     {characters && selectedTaxon ? (
-                        <div className="overflow-auto">
-                            <h2>{language.dictionary.labelCharacters}</h2>
-                            {renderTaxonCharacterFilter()}
+                        <div className="h-full overflow-hidden pb-36">
+                            <AddButton
+                                label={language.dictionary.labelCharacters}
+                                onClick={() => setOpenModal({ open: 'CHARACTERS', id: undefined })}
+                            />
+                            <CharacterFilter
+                                filter={filterTaxonCharacters}
+                                onChange={(e) => setFilterTaxonCharacters(e.target.value)}
+                            />
+                            <hr />
                             <CharacterCards
                                 characters={characters}
                                 taxa={taxa}
@@ -367,71 +354,6 @@ const BuildKey = ({ onSetTitle }) => {
                     ) : <p className="mt-24">{language.dictionary.selectTaxon}</p>}
                 </>
             )}
-        </div>
-    );
-
-    /**
-     * Render action bar buttons
-     *
-     * @returns JSX
-     */
-    const renderActionBar = () => (
-        <div className="md:flex relative mt-10">
-            <ActionButton
-                label={language.dictionary.btnSaveChanges}
-                icon={<SaveOutlined />}
-                onClick={() => setOpenModal({ open: 'SAVE', id: undefined })}
-                disabled={changesSaved}
-            />
-            <Button
-                variant="contained"
-                color="secondary"
-                size="medium"
-                endIcon={<Add />}
-                onClick={() => setOpenModal({ open: 'TAXA', id: undefined })}
-            >
-                {language.dictionary.newTaxon}
-            </Button>
-            <span className="ml-4">
-                <Button
-                    variant="contained"
-                    color="secondary"
-                    size="medium"
-                    endIcon={<Add />}
-                    onClick={() => setOpenModal({ open: 'CHARACTERS', id: undefined })}
-                >
-                    {language.dictionary.newCharacter}
-                </Button>
-            </span>
-            <span className="ml-4">
-                <Button
-                    variant="contained"
-                    color="secondary"
-                    size="medium"
-                    endIcon={<FlagOutlined />}
-                    onClick={() => setOpenModal({ open: 'STATUS', id: undefined })}
-                    disabled={!changesSaved}
-                >
-                    <span className="xl:hidden">{language.dictionary.headerChangeStatus}</span>
-                    <span className="hidden xl:inline">
-                        {`${language.dictionary.headerChangeStatus} ${revision ? `(${findRevisionStatusName(revision.status, language)})` : ''}`}
-                    </span>
-                </Button>
-            </span>
-            <span className="xl:absolute right-0 ml-4">
-                <Button
-                    variant="contained"
-                    color="primary"
-                    size="medium"
-                    endIcon={<Flip />}
-                    type="button"
-                    onClick={() => setSortByCharacters(!sortByCharacters)}
-                >
-                    {sortByCharacters
-                        ? language.dictionary.btnSortTaxa
-                        : language.dictionary.btnSortCharacters}
-                </Button>
-            </span>
         </div>
     );
 
@@ -501,38 +423,16 @@ const BuildKey = ({ onSetTitle }) => {
         </>
     );
 
-    /**
-     * Render mode info and change mode button
-     *
-     * @returns JSX
-     */
-    const renderModeInfo = () => {
-        if (revision) {
-            return (
-                <p className="mt-4">
-                    {revision.mode === 2 ? language.dictionary.mode2 : language.dictionary.mode1}
-                    <Button
-                        variant="text"
-                        size="medium"
-                        onClick={() => setOpenModal({ open: 'MODE', id: undefined })}
-                        disabled={!changesSaved}
-                    >
-                        {`(${language.dictionary.change})`}
-                    </Button>
-                </p>
-            );
-        }
-        return null;
-    };
-
     return (
-        <div className="relative py-14 px-4 lg:w-11/12 m-auto">
+        <div className="relative py-14 pl-2 m-auto h-screen overflow-hidden xl:ml-8">
             <BackButton onClick={() => handleCloseDialog(!changesSaved)} />
-            <p className="mt-6">{language.dictionary.rememberSave}</p>
-            {renderActionBar()}
-            {renderModeInfo()}
-            <hr className="mb-4 mt-2" />
             {error && <p className="text-red-600 mt-4">{error}</p>}
+            <BuildKeyActionBar
+                revision={revision}
+                changesSaved={changesSaved}
+                onOpenModal={(open) => setOpenModal({ open, id: undefined })}
+                onChangeSort={() => setSortByCharacters(!sortByCharacters)}
+            />
             {renderLists()}
             {renderDialogs()}
             <ProgressIndicator open={showProgress} />

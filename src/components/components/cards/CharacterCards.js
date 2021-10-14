@@ -291,7 +291,11 @@ const CharacterCards = ({
         return arr.map((character) => renderCard(character));
     };
 
-    return taxonCharacters ? renderCards() : null;
+    return taxonCharacters ? (
+        <div className="overflow-auto mt-1 h-full">
+            {renderCards()}
+        </div>
+    ) : null;
 };
 
 export default CharacterCards;

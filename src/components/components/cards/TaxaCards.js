@@ -212,7 +212,11 @@ const TaxaCards = ({
         </Card>
     );
 
-    return taxa && taxa.map((taxon) => renderCard(taxon));
+    return taxa ? (
+        <div className="overflow-auto mt-1 h-full">
+            {taxa.map((taxon) => renderCard(taxon))}
+        </div>
+    ) : null;
 };
 
 export default TaxaCards;

@@ -4,6 +4,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import SubdirectoryArrowRight from '@material-ui/icons/SubdirectoryArrowRight';
 import Stop from '@material-ui/icons/Stop';
+import CompareArrows from '@material-ui/icons/CompareArrows';
 import TreeItem from '@material-ui/lab/TreeItem';
 import EditOutlined from '@material-ui/icons/EditOutlined';
 import IconButton from '@material-ui/core/IconButton';
@@ -12,12 +13,13 @@ import { findTaxa } from '../../../utils/taxon';
 import getInputChange from '../../../utils/input-change';
 import TextInput from '../inputs/TextInput';
 import ListAvatar from '../ListAvatar';
+import AddButton from '../buttons/AddButton';
 
 /**
  * Render taxa list
  */
 const TaxaList = ({
-    taxa, selectedTaxon, onSelectTaxon, onEditTaxon,
+    taxa, selectedTaxon, onSelectTaxon, onEditTaxon, onClickAdd, onChangeSort,
 }) => {
     const { language } = useContext(LanguageContext);
     const defaultFormValues = {
@@ -48,7 +50,7 @@ const TaxaList = ({
      * @returns JSX
      */
     const renderLabel = (type, taxon) => (
-        <div className={type === 'list' ? 'p-2 w-96 h-16 flex' : 'p-4 w-96 flex'}>
+        <div className={type === 'list' ? 'p-2 h-16 flex' : 'p-4 flex'}>
             <span className="hidden lg:inline">
                 <ListAvatar
                     media={taxon.media}
@@ -108,31 +110,54 @@ const TaxaList = ({
     );
 
     return (
-        <div className="mr-4 xl:mr-16 p-2 border-r border-solid rounded">
-            <h2 className="mb-4">{language.dictionary.labelTaxa}</h2>
-            <TextInput
-                name="filter"
-                label={language.dictionary.labelSearch}
-                value={formValues.filter}
-                maxLength={280}
-                standard
-                onChange={(e) => setFormValues(getInputChange(e, formValues))}
-            />
-            {filter ? (
-                <List>
-                    {filter.map((taxon, index) => renderListItem(taxon, index))}
-                </List>
-            )
-                : (
-                    <TreeView
-                        defaultEndIcon={<Stop />}
-                        defaultParentIcon={<SubdirectoryArrowRight />}
-                        selected={`${selectedTaxon && selectedTaxon.id}`}
-                        expanded={findTaxa(taxa).map((taxon) => `${taxon.id}`)}
-                    >
-                        {taxa && taxa.map((taxon) => renderTreeItem(taxon))}
-                    </TreeView>
-                )}
+        <div className="mr-4 border-r border-solid rounded h-full overflow-hidden pb-36">
+            <div className="pl-2">
+                <div className="flex mr-2">
+                    <AddButton
+                        label={language.dictionary.labelTaxa}
+                        onClick={() => onClickAdd()}
+                    />
+                    <span className="ml-3">
+                        <IconButton
+                            edge="start"
+                            aria-label="add"
+                            color="primary"
+                            title={language.dictionary.btnSwitchLists}
+                            onClick={() => onChangeSort()}
+                        >
+                            <CompareArrows />
+                        </IconButton>
+                    </span>
+                </div>
+                <div className="w-80">
+                    <TextInput
+                        name="filter"
+                        label={language.dictionary.labelSearch}
+                        value={formValues.filter}
+                        maxLength={280}
+                        standard
+                        onChange={(e) => setFormValues(getInputChange(e, formValues))}
+                    />
+                </div>
+            </div>
+            <hr />
+            <div className="overflow-y-auto h-full mt-1">
+                {filter ? (
+                    <List>
+                        {filter.map((taxon, index) => renderListItem(taxon, index))}
+                    </List>
+                )
+                    : (
+                        <TreeView
+                            defaultEndIcon={<Stop />}
+                            defaultParentIcon={<SubdirectoryArrowRight />}
+                            selected={`${selectedTaxon && selectedTaxon.id}`}
+                            expanded={findTaxa(taxa).map((taxon) => `${taxon.id}`)}
+                        >
+                            {taxa && taxa.map((taxon) => renderTreeItem(taxon))}
+                        </TreeView>
+                    )}
+            </div>
         </div>
     );
 };

@@ -4,8 +4,7 @@
     "btnNewKey": "New key",
     "btnNext": "Next",
     "btnPrev": "Back",
-    "btnSortCharacters": "Sort by characters",
-    "btnSortTaxa": "Sort by taxa",
+    "btnSwitchLists": "Switch lists",
     "btnSaveChanges": "Save changes",
     "btnSave": "Save",
     "btnAdd": "Add",
@@ -59,7 +58,7 @@
     "sectionCreateKey": "Fill out the fields below to create a new key. The key name can contain max. 60 characters. The new key will be visible to all users of the ArtsApp Key Builder, but only selected users can edit it. The key will not be published in ArtsApp before it has been approved. Click the Help icon in the top right corner of the page for more information.",
     "sectionEditKey": "Check that the key status and current revision are correct before you save your changes. The version name (max. 30 characters) will be visible for the end user in ArtsApp when the key is published.",
     "sectionKeyInfo": "<p>Go to \"Edit information\" to change the keys title, description, image, collection/group, credits or to change the key's publishing status. To change the actual contents of the key, go to \"Edit key\".</p>",
-    "sectionBuildKey": "<p>Start by adding species and characters to your key. Thereafter connect species with relevant characters and set the necessary criteria. You can select whether you want the list to display species or characters by clicking the \"Sort by\" button. To change the display order of the characters you must first select to sort after characters and then adjust the order of characters in the list by using the arrows on the left.</p><br/><p>Select a taxon or character to see its connections. Change the premises for when a character should be visible by clicking on the grid icon on the character card.</p><br/><p>Whenever changes are saved, a new revision of the key is created. All revisions are preserved and saved in the key builder, so that you or others can continue working on the key from any specified revision.</p><br/><p>When your changes have been saved and you think that the revision is ready for review, click on the \"Status\" button and change the revision's status.</p>",
+    "sectionBuildKey": "<p>Start by adding species and characters to your key. Thereafter connect species with relevant characters and set the necessary criteria. You can select whether you want the list to display species or characters by clicking the \"Sort by\" button. To change the display order of the characters you must first select to sort after characters and then adjust the order of characters in the list by using the arrows on the left.</p><br/><p>Select a taxon or character to see its connections. Change the premises for when a character should be visible by clicking on the grid icon on the character card.</p><br/><p>Whenever changes are saved, a new revision of the key is created. All revisions are preserved and saved in the key builder, so that you or others can continue working on the key from any specified revision.</p><br/><p>Remember to save your changes! If the \"Save changes\" button is active it means that you have unsaved changes. When your changes have been saved and you think that the revision is ready for review, click on the \"Status\" button and change the revision's status.</p>",
     "sectionShareIndividual": "Share the key with another user by entering his/her email address.",
     "sectionShareOverview": "Here is an overview of the users that have already been granted access to the key.",
     "sectionNewTaxon": "Enter the taxon name (max. 120 characters) and create a description.",
@@ -90,7 +89,6 @@
     "sectionContributors": "Everyone that has contributed to developing the key should be added to the list of contributors. This might also include people that have made contributions outside of the key builder software. Always inform the people that you add to this list that you have added them. This list is public.",
     "sectionContributorsNot": "It is not necessary to add the same person to both the creator list and the contributor list. The name can contain max. 60 characters.",
     "sectionCreators": "Creators of the key should be added here. Always inform the people that you add to this list that you have added them. This list is public.",
-    "rememberSave": "Remember to save your changes! If the \"Save changes\" button is active it means that you have unsaved changes. Read the information in the \"Help\" menu before you start building the key.",
     "created": "Created:",
     "updated": "updated",
     "labelKeyName": "Key Name",
@@ -241,6 +239,5 @@
     "labelMode1": "Show all characters (simple)",
     "labelMode2": "Hide irrelevant characters (advanced)",
     "labelMode": "Show/hide",
-    "change": "change",
     "headerChangeMode": "Change mode"
 }

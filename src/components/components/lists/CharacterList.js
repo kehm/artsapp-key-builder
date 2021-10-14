@@ -4,6 +4,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import EditOutlined from '@material-ui/icons/EditOutlined';
+import CompareArrows from '@material-ui/icons/CompareArrows';
 import IconButton from '@material-ui/core/IconButton';
 import ArrowDropUp from '@material-ui/icons/ArrowDropUp';
 import ArrowDropDown from '@material-ui/icons/ArrowDropDown';
@@ -12,12 +13,14 @@ import { findName } from '../../../utils/translation';
 import getInputChange from '../../../utils/input-change';
 import TextInput from '../inputs/TextInput';
 import ListAvatar from '../ListAvatar';
+import AddButton from '../buttons/AddButton';
 
 /**
  * Render character list
  */
 const CharacterList = ({
-    characters, selectedCharacter, onSelectCharacter, onEditCharacter, onMoveCharacter,
+    characters, selectedCharacter, onSelectCharacter,
+    onEditCharacter, onMoveCharacter, onClickAdd, onChangeSort,
 }) => {
     const { language } = useContext(LanguageContext);
     const defaultFormValues = {
@@ -99,22 +102,47 @@ const CharacterList = ({
     );
 
     return (
-        <div className="mr-16 p-2 border-r border-solid rounded">
-            <h2 className="mb-4">{language.dictionary.labelCharacters}</h2>
-            <TextInput
-                name="filter"
-                label={language.dictionary.labelSearch}
-                value={formValues.filter}
-                maxLength={280}
-                standard
-                onChange={(e) => setFormValues(getInputChange(e, formValues))}
-            />
-            <List>
-                {filter
-                    ? filter.map((character, index) => renderCharacterItem(character, index))
-                    : characters
-                    && characters.map((character, index) => renderCharacterItem(character, index))}
-            </List>
+        <div className="mr-4 border-r border-solid rounded h-full overflow-hidden pb-36">
+            <div className="pl-2">
+                <div className="flex mr-2">
+                    <AddButton
+                        label={language.dictionary.labelCharacters}
+                        onClick={() => onClickAdd()}
+                    />
+                    <span className="ml-3">
+                        <IconButton
+                            edge="start"
+                            aria-label="add"
+                            color="primary"
+                            title={language.dictionary.btnSwitchLists}
+                            onClick={() => onChangeSort()}
+                        >
+                            <CompareArrows />
+                        </IconButton>
+                    </span>
+                </div>
+                <div className="w-80">
+                    <TextInput
+                        name="filter"
+                        label={language.dictionary.labelSearch}
+                        value={formValues.filter}
+                        maxLength={280}
+                        standard
+                        onChange={(e) => setFormValues(getInputChange(e, formValues))}
+                    />
+                </div>
+            </div>
+            <hr />
+            <div className="overflow-y-auto h-full mt-1">
+                <List>
+                    {filter
+                        ? filter.map((character, index) => renderCharacterItem(character, index))
+                        : characters
+                        && characters.map(
+                            (character, index) => renderCharacterItem(character, index),
+                        )}
+                </List>
+            </div>
         </div>
     );
 };
