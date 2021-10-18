@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
@@ -17,6 +17,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import LanguageContext from '../../../context/LanguageContext';
 import { findName } from '../../../utils/translation';
 import ListAvatar from '../ListAvatar';
+import { findParentTaxa, findSubTaxa } from '../../../utils/taxon';
 
 /**
  * Render taxa cards
@@ -25,14 +26,28 @@ const TaxaCards = ({
     taxa, character, taxaSwitches, statements, onStateChange,
 }) => {
     const { language } = useContext(LanguageContext);
-    const [switches, setSwitches] = useState({});
+    const [characterTaxa, setCharacterTaxa] = useState(undefined);
 
     /**
-     * Set initial switch positions
+     * Set taxa available for selection on the character
      */
     useEffect(() => {
-        if (taxaSwitches) setSwitches(taxaSwitches);
-    }, [taxaSwitches]);
+        let arr = taxa;
+        const characterStatements = statements.filter(
+            (statement) => statement.characterId === character.id,
+        );
+        arr = arr.filter((taxon) => {
+            const parentTaxa = findParentTaxa(taxa, taxon.id);
+            const subTaxa = findSubTaxa(taxon);
+            const relatedTaxa = parentTaxa.concat(subTaxa);
+            const exists = relatedTaxa.filter(
+                (el) => characterStatements.find((statement) => statement.taxonId === el.id),
+            );
+            if (exists.length === 0) return true;
+            return false;
+        });
+        setCharacterTaxa(arr);
+    }, [character, taxa, statements]);
 
     /**
      * Handle switch changes
@@ -40,7 +55,6 @@ const TaxaCards = ({
      * @param {Object} e Event
      */
     const handleSwitchChange = (e) => {
-        setSwitches({ ...switches, [e.target.name]: e.target.checked ? 0 : -1 });
         let arr = [...statements];
         if (e.target.checked) {
             let value;
@@ -70,7 +84,6 @@ const TaxaCards = ({
         );
         obj.value = stateId;
         onStateChange(arr);
-        setSwitches({ ...switches, [taxonId]: stateId });
     };
 
     /**
@@ -100,9 +113,9 @@ const TaxaCards = ({
             <ListItemIcon>
                 <Checkbox
                     onClick={() => handleAlternativeCheck(state.id, taxon.id)}
-                    disabled={switches[taxon.id] < 0}
+                    disabled={taxaSwitches[taxon.id] < 0}
                     edge="start"
-                    checked={state.id === switches[taxon.id]}
+                    checked={state.id === taxaSwitches[taxon.id]}
                     tabIndex={-1}
                     disableRipple
                 />
@@ -134,7 +147,7 @@ const TaxaCards = ({
             <>
                 <Slider
                     className="mt-6"
-                    disabled={switches[taxonId] < 0}
+                    disabled={taxaSwitches[taxonId] < 0}
                     color="secondary"
                     value={statement ? statement.value : defaultState}
                     aria-labelledby="numerical-value-slider"
@@ -192,7 +205,7 @@ const TaxaCards = ({
                     <FormControlLabel
                         control={(
                             <Switch
-                                checked={switches[taxon.id] > -1}
+                                checked={taxaSwitches[taxon.id] > -1}
                                 onChange={handleSwitchChange}
                                 name={taxon.id.toString()}
                             />
@@ -212,9 +225,9 @@ const TaxaCards = ({
         </Card>
     );
 
-    return taxa ? (
+    return characterTaxa ? (
         <div className="overflow-auto mt-1 h-full">
-            {taxa.map((taxon) => renderCard(taxon))}
+            {characterTaxa.map((taxon) => renderCard(taxon))}
         </div>
     ) : null;
 };

@@ -110,7 +110,7 @@ const BuildKey = ({ onSetTitle }) => {
     }, [selectedTaxon, characters, statements, revisionId]);
 
     /**
-     * Set correct switches and checkboxes on selecting a new character
+     * Set correct switches and checkboxes on selecting a new character or taxon
      */
     useEffect(() => {
         if (selectedCharacter && taxa) {
@@ -118,7 +118,7 @@ const BuildKey = ({ onSetTitle }) => {
                 (element) => element.characterId === selectedCharacter.id,
             );
             const switches = { ...taxaSwitches };
-            taxa.forEach((taxon) => { switches[taxon.id] = -1; });
+            Object.keys(switches).forEach((element) => { switches[element] = -1; });
             arr.forEach((element) => { switches[element.taxonId] = element.value || 0; });
             setTaxaSwitches(switches);
         }

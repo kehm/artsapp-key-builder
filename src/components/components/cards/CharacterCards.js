@@ -29,7 +29,6 @@ const CharacterCards = ({
     taxon, revision, onStateChange, onEditCharacter, onCreatedPremise,
 }) => {
     const { language } = useContext(LanguageContext);
-    const [switches, setSwitches] = useState({});
     const [openPremiseDialog, setOpenPremiseDialog] = useState(undefined);
     const [taxonCharacters, setTaxonCharacters] = useState(undefined);
 
@@ -56,20 +55,12 @@ const CharacterCards = ({
     }, [taxon, characters, statements]);
 
     /**
-     * Set initial switch positions
-     */
-    useEffect(() => {
-        if (characterSwitches) setSwitches(characterSwitches);
-    }, [characterSwitches]);
-
-    /**
      * Handle switch changes
      *
      * @param {Object} e Event
      */
     const handleSwitchChange = (e) => {
         const characterId = e.target.name;
-        setSwitches({ ...switches, [characterId]: e.target.checked ? 0 : -1 });
         let arr = [...statements];
         if (e.target.checked) {
             const character = characters
@@ -107,13 +98,11 @@ const CharacterCards = ({
                         && element.characterId === character.id
                         && element.value === stateId),
                 );
-                setSwitches({ ...switches, [character.id]: -1 });
             }
         } else if (character.states.length > arr.filter(
             (element) => element.taxonId === taxon.id && element.characterId === character.id,
         ).length) {
             arr.push({ taxonId: taxon.id, characterId: character.id, value: stateId });
-            setSwitches({ ...switches, [character.id]: 0 });
         }
         onStateChange(arr);
     };
@@ -152,7 +141,7 @@ const CharacterCards = ({
                 <ListItemIcon>
                     <Checkbox
                         onClick={() => handleAlternativeCheck(state.id, character, checked)}
-                        disabled={switches[character.id] < 0}
+                        disabled={characterSwitches[character.id] < 0}
                         edge="start"
                         checked={checked}
                         tabIndex={-1}
@@ -189,7 +178,7 @@ const CharacterCards = ({
             <>
                 <Slider
                     className="mt-6"
-                    disabled={switches[characterId] < 0}
+                    disabled={characterSwitches[characterId] < 0}
                     color="secondary"
                     value={statement ? statement.value : defaultState}
                     aria-labelledby="numerical-value-slider"
@@ -227,7 +216,7 @@ const CharacterCards = ({
                     <FormControlLabel
                         control={(
                             <Switch
-                                checked={switches[character.id] > -1}
+                                checked={characterSwitches[character.id] > -1}
                                 onChange={handleSwitchChange}
                                 name={character.id}
                             />

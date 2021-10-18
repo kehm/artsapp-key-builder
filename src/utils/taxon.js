@@ -12,10 +12,7 @@ export const findTaxon = (arr, id) => {
             taxon = element;
         } else if (element.children) {
             const tmp = findTaxon(element.children, id);
-            if (tmp) {
-                taxon = tmp;
-                taxon.parentId = element.id;
-            }
+            if (tmp) taxon = tmp;
         }
     });
     return taxon;

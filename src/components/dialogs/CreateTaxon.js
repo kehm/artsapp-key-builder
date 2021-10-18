@@ -17,13 +17,11 @@ import LanguageContext from '../../context/LanguageContext';
 import { createTaxon } from '../../utils/api/create';
 import { getTaxonSuggestions, getVernacularName } from '../../utils/api/get';
 import SuggestionList from '../components/lists/SuggestionList';
-import RichEditor from '../components/inputs/RichEditor';
 import { updateTaxon } from '../../utils/api/update';
 import CloseButton from '../components/buttons/CloseButton';
 import ConfirmDelete from './ConfirmDelete';
-import { findTaxon } from '../../utils/taxon';
+import { findParentTaxa, findTaxon } from '../../utils/taxon';
 import SetMediaInfo from './SetMediaInfo';
-import FileDrop from '../components/inputs/FileDrop';
 import UnsavedChanges from './UnsavedChanges';
 import { convertEditorToHtml, getTaxonInfoValues } from '../../utils/form-values';
 import TextInput from '../components/inputs/TextInput';
@@ -31,6 +29,7 @@ import getInputChange from '../../utils/input-change';
 import { handleUpdateRevisionMedia } from '../../utils/media';
 import ProgressIndicator from '../components/ProgressIndicator';
 import LanguageBar from '../components/LanguageBar';
+import InfoInputs from '../components/inputs/InfoInputs';
 
 /**
  * Render create taxon dialog
@@ -85,6 +84,8 @@ const CreateTaxon = ({
         if (revision && revision.content && revision.content.taxa) {
             if (id) {
                 const taxon = findTaxon(revision.content.taxa, id);
+                const parents = findParentTaxa(revision.content.taxa, id);
+                if (parents.length > 0) taxon.parentId = parents[0].id;
                 getTaxonInfoValues(taxon, formValues, revision.media).then((values) => {
                     setDefaultFormValues(JSON.parse(JSON.stringify(values)));
                     setFormValues(values);
@@ -207,52 +208,6 @@ const CreateTaxon = ({
     };
 
     /**
-     * Render text inputs for different languages
-     *
-     * @returns JSX
-     */
-    const renderTextInputs = () => (
-        <>
-            <TextInput
-                name="vernacularNameNo"
-                label={`${language.dictionary.labelVernacularName} (${language.dictionary.norwegianShort})`}
-                value={formValues.vernacularNameNo}
-                required={tab === 0 && languages.langNo}
-                hidden={tab === 1}
-                maxLength={120}
-                onChange={(e) => setFormValues(getInputChange(e, formValues))}
-            />
-            <TextInput
-                name="vernacularNameEn"
-                label={`${language.dictionary.labelVernacularName} (${language.dictionary.englishShort})`}
-                value={formValues.vernacularNameEn}
-                required={tab === 1 && languages.langEn}
-                hidden={tab === 0}
-                maxLength={120}
-                onChange={(e) => setFormValues(getInputChange(e, formValues))}
-            />
-            <RichEditor
-                id="descriptionNo"
-                ref={editorRef}
-                hidden={tab === 1}
-                defaultValue={formValues.descriptionNo}
-                label={`${language.dictionary.labelDescription} (${language.dictionary.norwegianShort})...`}
-                labelMaxLength={language.dictionary.maxLengthEditor}
-                onSave={(data) => setFormValues({ ...formValues, descriptionNo: data })}
-            />
-            <RichEditor
-                id="descriptionEn"
-                ref={editorRef}
-                hidden={tab === 0}
-                defaultValue={formValues.descriptionEn}
-                label={`${language.dictionary.labelDescription} (${language.dictionary.englishShort})...`}
-                labelMaxLength={language.dictionary.maxLengthEditor}
-                onSave={(data) => setFormValues({ ...formValues, descriptionEn: data })}
-            />
-        </>
-    );
-
-    /**
      * Render scientific name input
      *
      * @returns JSX
@@ -352,6 +307,55 @@ const CreateTaxon = ({
         </>
     );
 
+    /**
+     * Render inputs
+     *
+     * @returns JSX
+     */
+    const renderInputs = () => (
+        <>
+            {renderScientificNameInput()}
+            {id && <p className="mb-6 text-blue-600">{language.dictionary.warningChangeTaxon}</p>}
+            <Autocomplete
+                id="parentId"
+                fullWidth
+                value={formValues.parentId && taxaOptions
+                    ? taxaOptions.find((element) => element.id === formValues.parentId)
+                    : null}
+                onChange={(e, val) => setFormValues({ ...formValues, parentId: val ? val.id : '' })}
+                options={taxaOptions || []}
+                getOptionLabel={(taxon) => taxon.scientificName}
+                noOptionsText={language.dictionary.noAlternatives}
+                renderInput={(params) => <TextField {...params} label={language.dictionary.labelParentTaxon} variant="outlined" />}
+            />
+            <p>{`${language.dictionary.sectionNewTaxon} ${language.dictionary.activeLanguages}:`}</p>
+            <ul className="font-semibold">
+                {languages.langNo && <li>{language.dictionary.norwegian}</li>}
+                {languages.langEn && <li>{language.dictionary.english}</li>}
+            </ul>
+            <p className="mb-8">{language.dictionary.changeLanguages}</p>
+            <LanguageBar
+                tab={tab}
+                requireNo={languages.langNo}
+                requireEn={languages.langEn}
+                onTabChange={(val) => setTab(val)}
+            />
+            <InfoInputs
+                names={['vernacularNameNo', 'vernacularNameEn']}
+                title={language.dictionary.labelVernacularName}
+                formValues={formValues}
+                tab={tab}
+                languages={languages}
+                editorRef={editorRef}
+                onChange={(val) => setFormValues(val)}
+                onOpenFileDrop={(index, existing) => setOpenMediaDialog({
+                    index,
+                    existing,
+                })}
+            />
+        </>
+    );
+
     return (
         <Dialog
             fullWidth
@@ -371,48 +375,7 @@ const CreateTaxon = ({
                             JSON.stringify(formValues) !== JSON.stringify(defaultFormValues),
                         )}
                     />
-                    {renderScientificNameInput()}
-                    {id && <p className="mb-2 text-blue-600">{language.dictionary.warningChangeTaxon}</p>}
-                    <Autocomplete
-                        id="parentId"
-                        fullWidth
-                        value={formValues.parentId && taxaOptions
-                            ? taxaOptions.find((element) => element.id === formValues.parentId)
-                            : null}
-                        onChange={(e, val) => setFormValues({ ...formValues, parentId: val ? val.id : '' })}
-                        options={taxaOptions || []}
-                        getOptionLabel={(taxon) => taxon.scientificName}
-                        noOptionsText={language.dictionary.noAlternatives}
-                        renderInput={(params) => <TextField {...params} label={language.dictionary.labelParentTaxon} variant="outlined" />}
-                    />
-                    <p>{`${language.dictionary.sectionNewTaxon} ${language.dictionary.activeLanguages}:`}</p>
-                    <ul className="font-semibold">
-                        {languages.langNo && <li>{language.dictionary.norwegian}</li>}
-                        {languages.langEn && <li>{language.dictionary.english}</li>}
-                    </ul>
-                    <p className="mb-8">{language.dictionary.changeLanguages}</p>
-                    <LanguageBar
-                        tab={tab}
-                        requireNo={languages.langNo}
-                        requireEn={languages.langEn}
-                        onTabChange={(val) => setTab(val)}
-                    />
-                    {renderTextInputs()}
-                    <hr className="mb-6" />
-                    <FileDrop
-                        maxFiles={6}
-                        size="small"
-                        existingFiles={formValues.existingFiles}
-                        onUpdate={(files) => setFormValues({ ...formValues, files })}
-                        onUpdateExisting={(files) => setFormValues({
-                            ...formValues,
-                            existingFiles: files,
-                        })}
-                        onClickOpen={(index, existing) => setOpenMediaDialog({
-                            index,
-                            existing,
-                        })}
-                    />
+                    {renderInputs()}
                     {error && <p className="text-red-600 mb-4">{error}</p>}
                 </DialogContent>
                 {renderActions()}

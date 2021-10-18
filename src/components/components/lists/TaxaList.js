@@ -68,7 +68,11 @@ const TaxaList = ({
                 </li>
             </ul>
             <span className="absolute right-4 top-3">
-                <IconButton edge="end" aria-label="edit" onClick={() => onEditTaxon(taxon.id)}>
+                <IconButton
+                    edge="end"
+                    aria-label="edit"
+                    onClick={() => onEditTaxon(taxon.id)}
+                >
                     <EditOutlined />
                 </IconButton>
             </span>

@@ -18,16 +18,13 @@ import { updateKeyGroup } from '../../utils/api/update';
 import { getKeyGroup } from '../../utils/api/get';
 import { deleteKeyGroup } from '../../utils/api/delete';
 import ConfirmDelete from './ConfirmDelete';
-import RichEditor from '../components/inputs/RichEditor';
 import CloseButton from '../components/buttons/CloseButton';
-import FileDrop from '../components/inputs/FileDrop';
 import SetMediaInfo from './SetMediaInfo';
 import UnsavedChanges from './UnsavedChanges';
-import TextInput from '../components/inputs/TextInput';
-import getInputChange from '../../utils/input-change';
 import { handleUpdateEntityMedia } from '../../utils/media';
 import { convertEditorToHtml, getGroupInfoValues } from '../../utils/form-values';
 import LanguageBar from '../components/LanguageBar';
+import InfoInputs from '../components/inputs/InfoInputs';
 
 /**
  * Render create/update key group dialog
@@ -134,54 +131,14 @@ const CreateKeyGroup = ({
      */
     const renderTextInputs = () => (
         <>
-            <TextInput
-                name="nameNo"
-                label={`${language.dictionary.labelTitle} (${language.dictionary.norwegianShort})`}
-                value={formValues.nameNo}
-                required={tab === 0}
-                autoFocus
-                hidden={tab === 1}
-                maxLength={120}
-                onChange={(e) => setFormValues(getInputChange(e, formValues))}
-            />
-            <TextInput
-                name="nameEn"
-                label={`${language.dictionary.labelTitle} (${language.dictionary.englishShort})`}
-                value={formValues.nameEn}
-                required={tab === 1}
-                hidden={tab === 0}
-                maxLength={120}
-                onChange={(e) => setFormValues(getInputChange(e, formValues))}
-            />
-            <RichEditor
-                id="descriptionNo"
-                ref={editorRef}
-                hidden={tab === 1}
-                defaultValue={formValues.descriptionNo}
-                label={`${language.dictionary.labelDescription} (${language.dictionary.norwegianShort})...`}
-                labelMaxLength={language.dictionary.maxLengthEditor}
-                onSave={(data) => setFormValues({ ...formValues, descriptionNo: data })}
-            />
-            <RichEditor
-                id="descriptionEn"
-                ref={editorRef}
-                hidden={tab === 0}
-                defaultValue={formValues.descriptionEn}
-                label={`${language.dictionary.labelDescription} (${language.dictionary.englishShort})...`}
-                labelMaxLength={language.dictionary.maxLengthEditor}
-                onSave={(data) => setFormValues({ ...formValues, descriptionEn: data })}
-            />
-            <hr className="mb-6" />
-            <FileDrop
-                maxFiles={6}
-                size="small"
-                existingFiles={formValues.existingFiles}
-                onUpdate={(files) => setFormValues({ ...formValues, files })}
-                onUpdateExisting={(files) => setFormValues({
-                    ...formValues,
-                    existingFiles: files,
-                })}
-                onClickOpen={(index, existing) => setOpenMediaDialog({
+            <InfoInputs
+                names={['nameNo', 'nameEn']}
+                formValues={formValues}
+                tab={tab}
+                languages={{ langNo: true, langEn: true }}
+                editorRef={editorRef}
+                onChange={(val) => setFormValues(val)}
+                onOpenFileDrop={(index, existing) => setOpenMediaDialog({
                     index,
                     existing,
                 })}

@@ -9,31 +9,21 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { makeStyles } from '@material-ui/core/styles';
 import LanguageContext from '../../context/LanguageContext';
 import { createCharacter } from '../../utils/api/create';
-import RichEditor from '../components/inputs/RichEditor';
 import { updateCharacter, updateStatePremises } from '../../utils/api/update';
 import CloseButton from '../components/buttons/CloseButton';
 import ConfirmDelete from './ConfirmDelete';
-import FileDrop from '../components/inputs/FileDrop';
 import SetMediaInfo from './SetMediaInfo';
 import UnsavedChanges from './UnsavedChanges';
 import { convertEditorToHtml, getCategoricalCharacterInfoValues, getNumericalCharacterInfoValues } from '../../utils/form-values';
-import TextInput from '../components/inputs/TextInput';
 import getInputChange from '../../utils/input-change';
 import { handleUpdateRevisionMedia } from '../../utils/media';
 import ProgressIndicator from '../components/ProgressIndicator';
 import LanguageBar from '../components/LanguageBar';
 import CreateState from './CreateState';
 import { isValid } from '../../utils/character';
-
-// Set editor height
-const useStyles = makeStyles(() => ({
-    editor: {
-        height: '8.9rem',
-    },
-}));
+import InfoInputs from '../components/inputs/InfoInputs';
 
 /**
  * Render create character dialog
@@ -41,7 +31,6 @@ const useStyles = makeStyles(() => ({
 const CreateCharacter = ({
     openDialog, revision, id, languages, onClose, onCreated, onRemove,
 }) => {
-    const classes = useStyles();
     const { language } = useContext(LanguageContext);
     const [defaultFormValues, setDefaultFormValues] = useState({
         titleNo: '',
@@ -282,73 +271,6 @@ const CreateCharacter = ({
     };
 
     /**
-     * Render inputs for different languages
-     *
-     * @returns JSX
-     */
-    const renderInputs = () => (
-        <>
-            <TextInput
-                name="titleNo"
-                label={`${language.dictionary.labelTitle} (${language.dictionary.norwegianShort})`}
-                value={formValues.titleNo}
-                required={tab === 0 && languages.langNo}
-                autoFocus
-                hidden={tab === 1}
-                maxLength={120}
-                onChange={(e) => setFormValues(getInputChange(e, formValues))}
-            />
-            <TextInput
-                name="titleEn"
-                label={`${language.dictionary.labelTitle} (${language.dictionary.englishShort})`}
-                value={formValues.titleEn}
-                required={tab === 1 && languages.langEn}
-                autoFocus
-                hidden={tab === 0}
-                maxLength={120}
-                onChange={(e) => setFormValues(getInputChange(e, formValues))}
-            />
-            <RichEditor
-                id="descriptionNo"
-                ref={editorRef}
-                hidden={tab === 1}
-                size="small"
-                defaultValue={formValues.descriptionNo}
-                label={`${language.dictionary.labelDescription} (${language.dictionary.norwegianShort})...`}
-                labelMaxLength={language.dictionary.maxLengthEditor}
-                onSave={(data) => setFormValues({ ...formValues, descriptionNo: data })}
-                editorClass={classes.editor}
-            />
-            <RichEditor
-                id="descriptionEn"
-                ref={editorRef}
-                hidden={tab === 0}
-                size="small"
-                defaultValue={formValues.descriptionEn}
-                label={`${language.dictionary.labelDescription} (${language.dictionary.englishShort})...`}
-                labelMaxLength={language.dictionary.maxLengthEditor}
-                onSave={(data) => setFormValues({ ...formValues, descriptionEn: data })}
-                editorClass={classes.editor}
-            />
-            <hr className="mb-6" />
-            <FileDrop
-                maxFiles={6}
-                size="small"
-                existingFiles={formValues.existingFiles}
-                onUpdate={(files) => setFormValues({ ...formValues, files })}
-                onUpdateExisting={(files) => setFormValues({
-                    ...formValues,
-                    existingFiles: files,
-                })}
-                onClickOpen={(index, existing) => setOpenMediaDialog({
-                    index,
-                    existing,
-                })}
-            />
-        </>
-    );
-
-    /**
      * Render inputs for character info
      *
      * @returns JSX
@@ -367,7 +289,18 @@ const CreateCharacter = ({
                 requireEn={languages.langEn}
                 onTabChange={(val) => setTab(val)}
             />
-            {renderInputs()}
+            <InfoInputs
+                names={['titleNo', 'titleEn']}
+                formValues={formValues}
+                tab={tab}
+                languages={languages}
+                editorRef={editorRef}
+                onChange={(val) => setFormValues(val)}
+                onOpenFileDrop={(index, existing) => setOpenMediaDialog({
+                    index,
+                    existing,
+                })}
+            />
             {error && <p className="text-red-600 mb-4">{error}</p>}
             <DialogActions>
                 {id && (
