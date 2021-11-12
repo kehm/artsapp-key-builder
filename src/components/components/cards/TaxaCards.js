@@ -18,6 +18,7 @@ import LanguageContext from '../../../context/LanguageContext';
 import { findName } from '../../../utils/translation';
 import ListAvatar from '../ListAvatar';
 import { findParentTaxa, findSubTaxa } from '../../../utils/taxon';
+import { handleAlternativeCheck, handleSliderChange } from '../../../utils/character';
 
 /**
  * Render taxa cards
@@ -72,64 +73,50 @@ const TaxaCards = ({
     };
 
     /**
-     * Handle checkbox click
-     *
-     * @param {int} stateId State ID
-     * @param {int} taxonId Taxon ID
-     */
-    const handleAlternativeCheck = (stateId, taxonId) => {
-        const arr = [...statements];
-        const obj = arr.find(
-            (element) => element.characterId === character.id && element.taxonId === taxonId,
-        );
-        obj.value = stateId;
-        onStateChange(arr);
-    };
-
-    /**
-     * Handle numerical character slider change
-     *
-     * @param {Array} val New values
-     * @param {int} taxonId Taxon ID
-     */
-    const handleSliderChange = (val, taxonId) => {
-        const arr = [...statements];
-        const statement = arr.find(
-            (element) => element.characterId === character.id && element.taxonId === taxonId,
-        );
-        statement.value = val;
-        onStateChange(arr);
-    };
-
-    /**
      * Render state list item
      *
      * @param {Object} state State object
      * @param {Object} taxon Taxon object
      * @returns JSX
      */
-    const renderStateItem = (state, taxon) => (
-        <ListItem key={state.id} className="cursor-pointer">
-            <ListItemIcon>
-                <Checkbox
-                    onClick={() => handleAlternativeCheck(state.id, taxon.id)}
-                    disabled={taxaSwitches[taxon.id] < 0}
-                    edge="start"
-                    checked={state.id === taxaSwitches[taxon.id]}
-                    tabIndex={-1}
-                    disableRipple
-                />
-            </ListItemIcon>
-            <ListItemText primary={findName(state.title, language.language.split('_')[0]) || language.dictionary.unknown} />
-            <ListItemSecondaryAction className="hidden lg:inline">
-                <ListItemAvatar>
-                    <Avatar className="ml-4">
-                        <ImageIcon />
-                    </Avatar>
-                </ListItemAvatar>
-            </ListItemSecondaryAction>
-        </ListItem>
-    );
+    const renderStateItem = (state, taxon) => {
+        let checked = false;
+        const states = statements.filter(
+            (element) => element.taxonId === taxon.id && element.characterId === character.id,
+        );
+        const checkedStates = states.find((element) => element.value === state.id);
+        if (checkedStates) checked = true;
+        return (
+            <ListItem key={state.id} className="cursor-pointer">
+                <ListItemIcon>
+                    <Checkbox
+                        onClick={() => onStateChange(handleAlternativeCheck(
+                            statements,
+                            character,
+                            state.id,
+                            taxon.id,
+                            checked,
+                        ))}
+                        disabled={Array.isArray(taxaSwitches[taxon.id])
+                            && taxaSwitches[taxon.id].length < 1}
+                        edge="start"
+                        checked={Array.isArray(taxaSwitches[taxon.id])
+                            && taxaSwitches[taxon.id].includes(state.id)}
+                        tabIndex={-1}
+                        disableRipple
+                    />
+                </ListItemIcon>
+                <ListItemText primary={findName(state.title, language.language.split('_')[0]) || language.dictionary.unknown} />
+                <ListItemSecondaryAction className="hidden lg:inline">
+                    <ListItemAvatar>
+                        <Avatar className="ml-4">
+                            <ImageIcon />
+                        </Avatar>
+                    </ListItemAvatar>
+                </ListItemSecondaryAction>
+            </ListItem>
+        );
+    };
 
     /**
      * Render slider for numerical state
@@ -156,7 +143,12 @@ const TaxaCards = ({
                     min={parseFloat(state.min)}
                     max={parseFloat(state.max)}
                     marks
-                    onChange={(e, val) => handleSliderChange(val, taxonId)}
+                    onChange={(e, val) => onStateChange(handleSliderChange(
+                        statements,
+                        val,
+                        character.id,
+                        taxonId,
+                    ))}
                 />
                 <Typography id="discrete-slider" className="text-center" gutterBottom>
                     {findName(state.unit, language.language.split('_')[0]) || language.dictionary.unknown}
@@ -205,7 +197,8 @@ const TaxaCards = ({
                     <FormControlLabel
                         control={(
                             <Switch
-                                checked={taxaSwitches[taxon.id] > -1}
+                                checked={Array.isArray(taxaSwitches[taxon.id])
+                                    && taxaSwitches[taxon.id].length > 0}
                                 onChange={handleSwitchChange}
                                 name={taxon.id.toString()}
                             />

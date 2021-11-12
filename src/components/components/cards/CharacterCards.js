@@ -20,6 +20,7 @@ import LanguageContext from '../../../context/LanguageContext';
 import { findParentTaxa, findSubTaxa } from '../../../utils/taxon';
 import { findName } from '../../../utils/translation';
 import ListAvatar from '../ListAvatar';
+import { handleAlternativeCheck, handleSliderChange } from '../../../utils/character';
 
 /**
  * Render character cards
@@ -80,49 +81,6 @@ const CharacterCards = ({
     };
 
     /**
-     * Handle checkbox click
-     *
-     * @param {int} stateId State ID
-     * @param {Object} character Character
-     * @param {boolean} uncheck True if uncheck
-     */
-    const handleAlternativeCheck = (stateId, character, uncheck) => {
-        let arr = [...statements];
-        if (uncheck) {
-            if (arr.filter(
-                (element) => element.taxonId === taxon.id
-                    && element.characterId === character.id,
-            ).length > 1) {
-                arr = arr.filter(
-                    (element) => !(element.taxonId === taxon.id
-                        && element.characterId === character.id
-                        && element.value === stateId),
-                );
-            }
-        } else if (character.states.length > arr.filter(
-            (element) => element.taxonId === taxon.id && element.characterId === character.id,
-        ).length) {
-            arr.push({ taxonId: taxon.id, characterId: character.id, value: stateId });
-        }
-        onStateChange(arr);
-    };
-
-    /**
-     * Handle numerical character slider change
-     *
-     * @param {Array} val New values
-     * @param {int} characterId Character ID
-     */
-    const handleSliderChange = (val, characterId) => {
-        const arr = [...statements];
-        const statement = arr.find(
-            (element) => element.taxonId === taxon.id && element.characterId === characterId,
-        );
-        statement.value = val;
-        onStateChange(arr);
-    };
-
-    /**
      * Render list item for state
      *
      * @param {Object} state State object
@@ -140,7 +98,13 @@ const CharacterCards = ({
             <ListItem key={state.id} className="cursor-pointer">
                 <ListItemIcon>
                     <Checkbox
-                        onClick={() => handleAlternativeCheck(state.id, character, checked)}
+                        onClick={() => onStateChange(handleAlternativeCheck(
+                            statements,
+                            character,
+                            state.id,
+                            taxon.id,
+                            checked,
+                        ))}
                         disabled={characterSwitches[character.id] < 0}
                         edge="start"
                         checked={checked}
@@ -187,7 +151,13 @@ const CharacterCards = ({
                     min={parseFloat(state.min)}
                     max={parseFloat(state.max)}
                     marks
-                    onChange={(e, val) => handleSliderChange(val, characterId)}
+                    onChange={(e, val) => onStateChange(handleSliderChange(
+                        statements,
+                        val,
+                        taxon.id,
+                        undefined,
+                        characterId,
+                    ))}
                 />
                 <Typography id="discrete-slider" className="text-center" gutterBottom>
                     {findName(state.unit, language.language.split('_')[0]) || language.dictionary.unknown}

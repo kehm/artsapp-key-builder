@@ -1,4 +1,61 @@
 /**
+ * Handle alternative checkbox click
+ *
+ * @param {Array} statements Statements array
+ * @param {Object} character Character object
+ * @param {string} stateId State ID
+ * @param {string} taxonId Taxon ID
+ * @param {boolean} uncheck True if uncheck
+ * @returns {Array} Updated statements array
+ */
+export const handleAlternativeCheck = (statements, character, stateId, taxonId, uncheck) => {
+    let arr = [...statements];
+    if (uncheck) {
+        if (arr.filter(
+            (element) => element.taxonId === taxonId
+                && element.characterId === character.id,
+        ).length > 1) {
+            arr = arr.filter(
+                (element) => !(element.taxonId === taxonId
+                    && element.characterId === character.id
+                    && element.value === stateId),
+            );
+        }
+    } else if (character.states.length > arr.filter(
+        (element) => element.taxonId === taxonId && element.characterId === character.id,
+    ).length) {
+        arr.push({ taxonId, characterId: character.id, value: stateId });
+    }
+    return arr;
+};
+
+/**
+ * Handle numerical character slider change
+ *
+ * @param {Array} statements Statements array
+ * @param {Array} val Value
+ * @param {string} objectId Taxon or Character ID
+ * @param {string} taxonId Taxon ID
+ * @param {string} characterId Character ID
+ * @returns {Array} Updated statements
+ */
+export const handleSliderChange = (statements, val, objectId, taxonId, characterId) => {
+    const arr = [...statements];
+    let statement;
+    if (taxonId) {
+        statement = arr.find(
+            (element) => element.characterId === objectId && element.taxonId === taxonId,
+        );
+    } else if (characterId) {
+        statement = arr.find(
+            (element) => element.taxonId === objectId && element.characterId === characterId,
+        );
+    }
+    if (statement) statement.value = val;
+    return arr;
+};
+
+/**
  * Remove premises that includes the selected character
  *
  * @param {int} id Character ID

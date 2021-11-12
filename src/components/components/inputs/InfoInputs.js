@@ -76,10 +76,7 @@ const InfoInputs = ({
                     ...formValues,
                     existingFiles: files,
                 })}
-                onClickOpen={(index, existing) => onOpenFileDrop({
-                    index,
-                    existing,
-                })}
+                onClickOpen={(index, existing) => onOpenFileDrop(index, existing)}
             />
         </>
     );

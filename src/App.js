@@ -52,7 +52,7 @@ const App = () => {
    * Check for a valid user session
    */
   useEffect(() => {
-    if (!authenticated && !user.authenticated) {
+    if (!authenticated) {
       const authenticate = async () => {
         try {
           const response = await axios.post(
@@ -113,17 +113,14 @@ const App = () => {
    */
   const renderPage = (Component, permission) => {
     if (!authenticated) return null;
-    if (user.authenticated) {
-      if (!permission || isPermitted(user, [permission])) {
-        return (
-          <div className="h-full lg:ml-56 mb-10 md:mb-0 bg-white z-50 text-darkGrey">
-            <Component onSetTitle={(title) => setPageTitle(title)} />
-          </div>
-        );
-      }
-      return <Redirect to="/unauthorized" />;
+    if (user.authenticated && (!permission || isPermitted(user, [permission]))) {
+      return (
+        <div className="h-full lg:ml-56 mb-10 md:mb-0 bg-white z-50 text-darkGrey">
+          <Component onSetTitle={(title) => setPageTitle(title)} />
+        </div>
+      );
     }
-    return <Redirect to="/signin" />;
+    return <Redirect to="/unauthorized" />;
   };
 
   return (

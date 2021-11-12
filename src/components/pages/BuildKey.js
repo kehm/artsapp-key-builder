@@ -118,8 +118,10 @@ const BuildKey = ({ onSetTitle }) => {
                 (element) => element.characterId === selectedCharacter.id,
             );
             const switches = { ...taxaSwitches };
-            Object.keys(switches).forEach((element) => { switches[element] = -1; });
-            arr.forEach((element) => { switches[element.taxonId] = element.value || 0; });
+            Object.keys(switches).forEach((element) => { switches[element] = []; });
+            arr.forEach((element) => {
+                if (element.value) switches[element.taxonId].push(element.value);
+            });
             setTaxaSwitches(switches);
         }
     }, [selectedCharacter, taxa, statements, revisionId]);
