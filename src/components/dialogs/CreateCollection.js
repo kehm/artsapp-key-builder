@@ -2,14 +2,8 @@ import React, {
     useContext, useEffect, useState, useRef,
 } from 'react';
 import Dialog from '@material-ui/core/Dialog';
-import IconButton from '@material-ui/core/IconButton';
-import PostAdd from '@material-ui/icons/PostAdd';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import SaveOutlined from '@material-ui/icons/SaveOutlined';
-import DeleteOutlined from '@material-ui/icons/DeleteOutlined';
-import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import LanguageContext from '../../context/LanguageContext';
@@ -22,8 +16,9 @@ import CloseButton from '../components/buttons/CloseButton';
 import SetMediaInfo from './SetMediaInfo';
 import { convertEditorToHtml, getCollectionInfoValues } from '../../utils/form-values';
 import { handleUpdateEntityMedia } from '../../utils/media';
-import LanguageBar from '../components/LanguageBar';
 import InfoInputs from '../components/inputs/InfoInputs';
+import LanguageBar from '../components/LanguageBar';
+import DialogButtons from '../components/buttons/DialogButtons';
 
 /**
  * Render create/update collection dialog
@@ -184,34 +179,6 @@ const CreateCollection = ({
         </>
     );
 
-    /**
-     * Render dialog action buttons
-     *
-     * @returns JSX
-     */
-    const renderActions = () => (
-        <DialogActions>
-            {id && (
-                <IconButton
-                    edge="start"
-                    aria-label="delete"
-                    onClick={() => handleDelete(true)}
-                >
-                    <DeleteOutlined />
-                </IconButton>
-            )}
-            <Button
-                variant="contained"
-                color="secondary"
-                size="large"
-                endIcon={id ? <SaveOutlined /> : <PostAdd />}
-                type="submit"
-            >
-                {id ? language.dictionary.btnSaveChanges : language.dictionary.btnCreate}
-            </Button>
-        </DialogActions>
-    );
-
     return (
         <Dialog
             fullWidth
@@ -234,14 +201,20 @@ const CreateCollection = ({
                     <p className="mb-8">{language.dictionary.sectionCollection}</p>
                     <LanguageBar
                         tab={tab}
+                        showNo
+                        showEn
                         requireNo
                         requireEn
-                        onTabChange={(val) => setTab(val)}
+                        onChangeTab={(val) => setTab(val)}
                     />
                     {renderInputs()}
                     {error && <p className="text-red-600 mb-4">{error}</p>}
                 </DialogContent>
-                {renderActions()}
+                <DialogButtons
+                    exists={id}
+                    isForm
+                    onDelete={() => handleDelete(true)}
+                />
                 <ConfirmDelete
                     openDialog={confirmDelete}
                     onClose={() => setConfirmDelete(false)}

@@ -4,10 +4,6 @@ import React, {
 import { useHistory } from 'react-router';
 import Button from '@material-ui/core/Button';
 import PostAdd from '@material-ui/icons/PostAdd';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import { makeStyles } from '@material-ui/core/styles';
 import LanguageContext from '../../context/LanguageContext';
 import { createKey, createRevision } from '../../utils/api/create';
 import { getCollections, getKeyGroups, getUserWorkgroups } from '../../utils/api/get';
@@ -29,14 +25,8 @@ import UserContext from '../../context/UserContext';
 import WorkgroupSelect from '../components/inputs/WorkgroupSelect';
 import CreateWorkgroup from '../dialogs/CreateWorkgroup';
 import isPermitted from '../../utils/is-permitted';
+import LanguageBar from '../components/LanguageBar';
 
-const useStyles = makeStyles(() => ({
-    bar: {
-        zIndex: 0,
-        marginBottom: '1.5rem',
-        marginTop: '1.5rem',
-    },
-}));
 /**
  * Render page to create new key
  */
@@ -55,7 +45,6 @@ const CreateKey = ({ onSetTitle }) => {
     const defaultLanguages = { no: true, en: false };
     const { language } = useContext(LanguageContext);
     const { user } = useContext(UserContext);
-    const classes = useStyles();
     const [formValues, setFormValues] = useState(defaultFormValues);
     const [languages, setLanguages] = useState(defaultLanguages);
     const [workgroups, setWorkgroups] = useState(undefined);
@@ -290,30 +279,6 @@ const CreateKey = ({ onSetTitle }) => {
         return null;
     };
 
-    /**
-     * Render languages bar
-     *
-     * @returns JSX
-     */
-    const renderLangBar = () => (
-        <AppBar position="relative" className={classes.bar} color="default">
-            <Tabs value={tab} onChange={(e, val) => setTab(val)} aria-label="language tabs">
-                {languages.no && (
-                    <Tab
-                        label={`${language.dictionary.norwegian} (${language.dictionary.norwegianShort})${languages.no ? ' *' : ''}`}
-                        onClick={() => setSelectedLanguage('no')}
-                    />
-                )}
-                {languages.en && (
-                    <Tab
-                        label={`${language.dictionary.english} (${language.dictionary.englishShort})${languages.en ? ' *' : ''}`}
-                        onClick={() => setSelectedLanguage('en')}
-                    />
-                )}
-            </Tabs>
-        </AppBar>
-    );
-
     return (
         <div className="py-14 px-4 md:w-10/12 m-auto">
             <BackButton
@@ -327,7 +292,16 @@ const CreateKey = ({ onSetTitle }) => {
                     switches={languages}
                     onSwitchUpdate={(switches) => setTab(0, setLanguages(switches))}
                 />
-                {renderLangBar()}
+                <LanguageBar
+                    tab={tab}
+                    showNo={languages.no}
+                    showEn={languages.en}
+                    requireNo={languages.no}
+                    requireEn={languages.en}
+                    selectable
+                    onChangeTab={(val) => setTab(val)}
+                    onSelectLanguage={(val) => setSelectedLanguage(val)}
+                />
                 {selectedLanguage && (
                     <>
                         {renderTextInputs()}

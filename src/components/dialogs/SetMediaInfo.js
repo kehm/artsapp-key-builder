@@ -6,15 +6,13 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
 import LanguageContext from '../../context/LanguageContext';
 import CloseButton from '../components/buttons/CloseButton';
 import CreatorSelect from '../components/inputs/CreatorSelect';
 import AddCreator from './AddCreator';
 import TextInput from '../components/inputs/TextInput';
 import getInputChange from '../../utils/input-change';
+import LanguageBar from '../components/LanguageBar';
 
 /**
  * Render set media info dialog
@@ -113,12 +111,12 @@ const SetMediaInfo = ({
                         )}
                     />
                     <p className="mb-8">{language.dictionary.sectionMediaCredits}</p>
-                    <AppBar position="relative" className="my-6" color="default">
-                        <Tabs value={tab} onChange={(e, val) => setTab(val)} aria-label="language tabs">
-                            <Tab label={`${language.dictionary.norwegian} (${language.dictionary.norwegianShort})`} />
-                            <Tab label={`${language.dictionary.english} (${language.dictionary.englishShort})`} />
-                        </Tabs>
-                    </AppBar>
+                    <LanguageBar
+                        tab={tab}
+                        showNo
+                        showEn
+                        onChangeTab={(val) => setTab(val)}
+                    />
                     {renderInputs()}
                 </DialogContent>
                 <DialogActions>

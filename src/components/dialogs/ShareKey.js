@@ -86,6 +86,28 @@ const ShareKey = ({
     };
 
     /**
+     * Render action bar
+     *
+     * @returns JSX
+     */
+    const renderBar = () => (
+        <AppBar
+            position="relative"
+            className="my-6"
+            color="default"
+        >
+            <Tabs
+                value={tab}
+                onChange={(e, val) => setTab(val)}
+                aria-label="share tabs"
+            >
+                <Tab label={language.dictionary.labelOverview} />
+                <Tab label={language.dictionary.btnAdd} />
+            </Tabs>
+        </AppBar>
+    );
+
+    /**
      * Render tabs
      *
      * @returns JSX
@@ -135,12 +157,7 @@ const ShareKey = ({
                 <DialogContent>
                     <CloseButton onClick={() => onClose()} />
                     <p className="mb-4">{language.dictionary.sectionShareKey}</p>
-                    <AppBar position="relative" className="my-6" color="default">
-                        <Tabs value={tab} onChange={(e, val) => setTab(val)} aria-label="language tabs">
-                            <Tab label={language.dictionary.labelOverview} />
-                            <Tab label={language.dictionary.btnAdd} />
-                        </Tabs>
-                    </AppBar>
+                    {renderBar()}
                     {renderInputs()}
                     {error && <p className="text-red-600 mb-4">{error}</p>}
                     {tab > 0 && (

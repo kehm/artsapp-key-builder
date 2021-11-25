@@ -2,14 +2,8 @@ import React, {
     useContext, useEffect, useState, useRef,
 } from 'react';
 import Dialog from '@material-ui/core/Dialog';
-import IconButton from '@material-ui/core/IconButton';
-import PostAdd from '@material-ui/icons/PostAdd';
-import SaveOutlined from '@material-ui/icons/SaveOutlined';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import DeleteOutlined from '@material-ui/icons/DeleteOutlined';
-import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import LanguageContext from '../../context/LanguageContext';
@@ -23,8 +17,9 @@ import SetMediaInfo from './SetMediaInfo';
 import UnsavedChanges from './UnsavedChanges';
 import { handleUpdateEntityMedia } from '../../utils/media';
 import { convertEditorToHtml, getGroupInfoValues } from '../../utils/form-values';
-import LanguageBar from '../components/LanguageBar';
 import InfoInputs from '../components/inputs/InfoInputs';
+import LanguageBar from '../components/LanguageBar';
+import DialogButtons from '../components/buttons/DialogButtons';
 
 /**
  * Render create/update key group dialog
@@ -162,6 +157,47 @@ const CreateKeyGroup = ({
         </>
     );
 
+    /**
+     * Render create key group form
+     *
+     * @returns JSC
+     */
+    const renderForm = () => (
+        <form className="p-2" autoComplete="off" onSubmit={handleSubmit}>
+            <DialogTitle>
+                {id ? language.dictionary.btnEditGroup : language.dictionary.newKeyGroup}
+            </DialogTitle>
+            <DialogContent>
+                <CloseButton
+                    onClick={() => onClose(
+                        JSON.stringify(formValues) !== JSON.stringify(defaultFormValues),
+                    )}
+                />
+                <p className="mb-8">{language.dictionary.sectionKeyGroup}</p>
+                <LanguageBar
+                    tab={tab}
+                    showNo
+                    showEn
+                    requireNo
+                    requireEn
+                    onChangeTab={(val) => setTab(val)}
+                />
+                {renderTextInputs()}
+                {error && <p className="text-red-600 mb-4">{error}</p>}
+            </DialogContent>
+            <DialogButtons
+                id={id}
+                isForm
+                onDelete={() => handleDelete(true)}
+            />
+            <ConfirmDelete
+                openDialog={confirmDelete}
+                onClose={() => setConfirmDelete(false)}
+                onConfirm={() => handleDelete()}
+            />
+        </form>
+    );
+
     return (
         <Dialog
             fullWidth
@@ -171,46 +207,7 @@ const CreateKeyGroup = ({
                 JSON.stringify(formValues) !== JSON.stringify(defaultFormValues),
             )}
         >
-            {openDialog && (
-                <form className="p-2" autoComplete="off" onSubmit={handleSubmit}>
-                    <DialogTitle>
-                        {id ? language.dictionary.btnEditGroup : language.dictionary.newKeyGroup}
-                    </DialogTitle>
-                    <DialogContent>
-                        <CloseButton
-                            onClick={() => onClose(
-                                JSON.stringify(formValues) !== JSON.stringify(defaultFormValues),
-                            )}
-                        />
-                        <p className="mb-8">{language.dictionary.sectionKeyGroup}</p>
-                        <LanguageBar
-                            tab={tab}
-                            requireNo
-                            requireEn
-                            onTabChange={(val) => setTab(val)}
-                        />
-                        {renderTextInputs()}
-                        {error && <p className="text-red-600 mb-4">{error}</p>}
-                    </DialogContent>
-                    <DialogActions>
-                        {id && (
-                            <IconButton edge="start" aria-label="delete" onClick={() => handleDelete(true)}>
-                                <DeleteOutlined />
-                            </IconButton>
-                        )}
-                        <Button variant="contained" color="secondary" size="large" endIcon={id ? <SaveOutlined /> : <PostAdd />} type="submit">
-                            {id
-                                ? language.dictionary.btnSaveChanges
-                                : language.dictionary.btnCreate}
-                        </Button>
-                    </DialogActions>
-                    <ConfirmDelete
-                        openDialog={confirmDelete}
-                        onClose={() => setConfirmDelete(false)}
-                        onConfirm={() => handleDelete()}
-                    />
-                </form>
-            )}
+            {openDialog && renderForm()}
             {openMediaDialog.index !== undefined && (
                 <SetMediaInfo
                     size="small"

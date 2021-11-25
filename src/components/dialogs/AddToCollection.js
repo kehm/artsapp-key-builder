@@ -102,6 +102,29 @@ const AddToCollection = ({
     };
 
     /**
+     * Render action bar
+     *
+     * @returns JSX
+     */
+    const renderBar = () => (
+        <AppBar
+            position="relative"
+            className="my-6"
+            color="default"
+        >
+            <Tabs
+                value={tab}
+                onChange={(e, val) => setTab(val)}
+                aria-label="collection tabs"
+            >
+                <Tab label={language.dictionary.labelOverview} />
+                {(isEditor && user.workgroups.includes(collection.workgroup_id))
+                    && <Tab label={language.dictionary.btnAdd} />}
+            </Tabs>
+        </AppBar>
+    );
+
+    /**
      * Render dialog content
      *
      * @returns JSX
@@ -152,13 +175,7 @@ const AddToCollection = ({
                 <DialogContent>
                     <CloseButton onClick={() => onClose()} />
                     <p>{language.dictionary.sectionKeyCollectionList}</p>
-                    <AppBar position="relative" className="my-6" color="default">
-                        <Tabs value={tab} onChange={(e, val) => setTab(val)} aria-label="language tabs">
-                            <Tab label={language.dictionary.labelOverview} />
-                            {(isEditor && user.workgroups.includes(collection.workgroup_id))
-                                && <Tab label={language.dictionary.btnAdd} />}
-                        </Tabs>
-                    </AppBar>
+                    {renderBar()}
                     {renderContent()}
                     {collectionKeys && collectionKeys.length === 0 && <p className="mb-4">{language.dictionary.noKeysInCollection}</p>}
                     {error && <p className="text-red-600 mb-4">{error}</p>}

@@ -120,6 +120,7 @@ const BuildKey = ({ onSetTitle }) => {
             const switches = { ...taxaSwitches };
             Object.keys(switches).forEach((element) => { switches[element] = []; });
             arr.forEach((element) => {
+                if (!switches[element.taxonId]) switches[element.taxonId] = [];
                 if (element.value) switches[element.taxonId].push(element.value);
             });
             setTaxaSwitches(switches);
@@ -218,12 +219,14 @@ const BuildKey = ({ onSetTitle }) => {
                     setError(language.dictionary.errorRemoveTaxon);
                 } else {
                     const parentTaxa = findParentTaxa(taxaArr, taxon.id);
-                    if (parentTaxa.length > 0) taxaArr = parentTaxa[0].children;
-                    if (taxaArr) {
-                        taxaArr = taxaArr.filter((element) => element.id !== taxon.id);
-                        statementsArr = statementsArr.filter((element) => element.taxonId !== id);
-                        note = `Removed taxon ${name}`;
-                    } else valid = false;
+                    if (parentTaxa.length > 0 && parentTaxa[0].children) {
+                        parentTaxa[0].children = parentTaxa[0].children.filter(
+                            (element) => element.id !== taxon.id,
+                        );
+                    }
+                    taxaArr = taxaArr.filter((element) => element.id !== taxon.id);
+                    statementsArr = statementsArr.filter((element) => element.taxonId !== id);
+                    note = `Removed taxon ${name}`;
                 }
             }
         } else if (field === 'CHARACTERS') {

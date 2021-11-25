@@ -9,11 +9,11 @@ import TableRow from '@material-ui/core/TableRow';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Add from '@material-ui/icons/Add';
-import DeleteOutlined from '@material-ui/icons/DeleteOutlined';
 import EditOutlined from '@material-ui/icons/EditOutlined';
 import LanguageContext from '../../../context/LanguageContext';
 import ConfirmDelete from '../../dialogs/ConfirmDelete';
 import { findName } from '../../../utils/translation';
+import DeleteButton from '../buttons/DeleteButton';
 
 /**
  * Render logical premises table
@@ -115,13 +115,7 @@ const PremiseGroupTable = ({
                             <EditOutlined />
                         </IconButton>
                     </span>
-                    <IconButton
-                        edge="end"
-                        aria-label="delete"
-                        onClick={() => handleRemovePremise(premiseIndex, true)}
-                    >
-                        <DeleteOutlined />
-                    </IconButton>
+                    <DeleteButton onClick={() => handleRemovePremise(premiseIndex, true)} />
                 </span>
                 {premiseIndex !== premises.length - 1 && <p className="text-primary pt-4">{operator}</p>}
             </TableCell>

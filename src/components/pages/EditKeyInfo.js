@@ -4,9 +4,6 @@ import { useParams } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import SaveOutlined from '@material-ui/icons/SaveOutlined';
 import DeleteOutlined from '@material-ui/icons/DeleteOutlined';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
 import LanguageContext from '../../context/LanguageContext';
 import { hideKey, updateKey } from '../../utils/api/update';
 import {
@@ -35,6 +32,7 @@ import VersionControlForm from '../components/forms/VersionControlForm';
 import OwnershipForm from '../components/forms/OwnershipForm';
 import KeyInfoForm from '../components/forms/KeyInfoForm';
 import isPermitted from '../../utils/is-permitted';
+import LanguageBar from '../components/LanguageBar';
 
 /**
  * Render key edit info page
@@ -344,30 +342,6 @@ const EditKeyInfo = ({ onSetTitle }) => {
     );
 
     /**
-     * Render languages bar
-     *
-     * @returns JSX
-     */
-    const renderLangBar = () => (
-        <AppBar position="relative" className="my-6" color="default">
-            <Tabs value={tab} onChange={(e, val) => setTab(val)} aria-label="language tabs">
-                {languages.no && (
-                    <Tab
-                        label={`${language.dictionary.norwegian} (${language.dictionary.norwegianShort})${languages.no ? ' *' : ''}`}
-                        onClick={() => setSelectedLanguage('no')}
-                    />
-                )}
-                {languages.en && (
-                    <Tab
-                        label={`${language.dictionary.english} (${language.dictionary.englishShort})${languages.en ? ' *' : ''}`}
-                        onClick={() => setSelectedLanguage('en')}
-                    />
-                )}
-            </Tabs>
-        </AppBar>
-    );
-
-    /**
      * Render inputs
      *
      * @returns JSX
@@ -461,7 +435,16 @@ const EditKeyInfo = ({ onSetTitle }) => {
                     switches={languages}
                     onSwitchUpdate={(switches) => setTab(0, setLanguages(switches))}
                 />
-                {renderLangBar()}
+                <LanguageBar
+                    tab={tab}
+                    showNo={languages.no}
+                    showEn={languages.en}
+                    requireNo={languages.no}
+                    requireEn={languages.en}
+                    selectable
+                    onChangeTab={(val) => setTab(val)}
+                    onSelectLanguage={(val) => setSelectedLanguage(val)}
+                />
                 {selectedLanguage && renderInputs()}
                 {error && <p className="text-red-600 mb-4">{error}</p>}
                 {renderActions()}

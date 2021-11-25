@@ -141,8 +141,16 @@ const AddToWorkgroup = ({
                 <DialogTitle>{language.dictionary.headerWorkgroupUsers}</DialogTitle>
                 <DialogContent>
                     <CloseButton onClick={() => onClose()} />
-                    <AppBar position="relative" className="mb-6" color="default">
-                        <Tabs value={tab} onChange={(e, val) => setTab(val)} aria-label="workgroup tabs">
+                    <AppBar
+                        position="relative"
+                        className="mb-6"
+                        color="default"
+                    >
+                        <Tabs
+                            value={tab}
+                            onChange={(e, val) => setTab(val)}
+                            aria-label="workgroup tabs"
+                        >
                             <Tab label={language.dictionary.labelOverview} />
                             <Tab label={language.dictionary.btnAdd} />
                         </Tabs>

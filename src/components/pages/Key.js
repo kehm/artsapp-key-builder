@@ -3,15 +3,11 @@ import { useHistory } from 'react-router';
 import { useParams } from 'react-router-dom';
 import Dialog from '@material-ui/core/Dialog';
 import Button from '@material-ui/core/Button';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
 import OpenInNewOutlined from '@material-ui/icons/OpenInNewOutlined';
 import EditOutlined from '@material-ui/icons/EditOutlined';
 import GroupAddOutlined from '@material-ui/icons/GroupAddOutlined';
 import LanguageContext from '../../context/LanguageContext';
 import { getKey, getRevisions, getWorkgroups } from '../../utils/api/get';
-import formatDate from '../../utils/format-date';
 import ShareKey from '../dialogs/ShareKey';
 import SelectRevision from '../dialogs/SelectRevision';
 import BackButton from '../components/buttons/BackButton';
@@ -21,6 +17,8 @@ import MissingPermission from '../components/MissingPermission';
 import isPermitted from '../../utils/is-permitted';
 import TestKey from '../dialogs/TestKey';
 import ActionButton from '../components/buttons/ActionButton';
+import KeyInfoList from '../components/lists/KeyInfoList';
+import LanguageBar from '../components/LanguageBar';
 
 /**
  * Render key info page
@@ -106,96 +104,20 @@ const Key = ({ onSetTitle }) => {
             (element) => element.languageCode === selectedLanguage,
         );
         onSetTitle(info && info.title ? info.title : language.dictionary.keys);
-        const createdAt = key.created_at ? formatDate(key.created_at, true) : undefined;
-        const modified = key.updated_at ? formatDate(key.updated_at) : undefined;
         return (
             <div className="mt-6">
-                <AppBar position="relative" className="mb-6 mt-10 max-w-2xl" color="default">
-                    <Tabs value={tab} onChange={(e, val) => setTab(val)} aria-label="language tabs">
-                        {languages.langNo && (
-                            <Tab
-                                label={`${language.dictionary.norwegian} (${language.dictionary.norwegianShort})`}
-                                onClick={() => setSelectedLanguage('no')}
-                            />
-                        )}
-                        {languages.langEn && (
-                            <Tab
-                                label={`${language.dictionary.english} (${language.dictionary.englishShort})`}
-                                onClick={() => setSelectedLanguage('en')}
-                            />
-                        )}
-                    </Tabs>
-                </AppBar>
+                <LanguageBar
+                    tab={tab}
+                    showNo={languages.langNo}
+                    showEn={languages.langEn}
+                    selectable
+                    maxWidth
+                    onChangeTab={(val) => setTab(val)}
+                    onSelectLanguage={(val) => setSelectedLanguage(val)}
+                />
                 <ThumbnailList media={key && key.media} />
                 <div className="max-w-2xl mt-6" dangerouslySetInnerHTML={{ __html: info && info.description }} />
-                <h2 className="mb-4 mt-8">{language.dictionary.keyInfo}</h2>
-                <dl className="mb-8">
-                    {modified && modified !== createdAt && (
-                        <>
-                            <dt className="float-left w-32 font-bold text-right mr-6 tracking-wide">
-                                {language.dictionary.labelModified}
-                            </dt>
-                            <dd>{modified}</dd>
-                        </>
-                    )}
-                    {createdAt && (
-                        <>
-                            <dt className="float-left w-32 font-bold text-right mr-6 tracking-wide">
-                                {language.dictionary.created}
-                            </dt>
-                            <dd>{createdAt}</dd>
-                        </>
-                    )}
-                    {key.status && (
-                        <>
-                            <dt className="float-left w-32 font-bold text-right mr-6 tracking-wide">
-                                {language.dictionary.labelStatus}
-                                :
-                            </dt>
-                            <dd>
-                                {key.status.charAt(0).toUpperCase()
-                                    + key.status.slice(1).toLowerCase()}
-                            </dd>
-                        </>
-                    )}
-                    {key.version && (
-                        <>
-                            <dt className="float-left w-32 font-bold text-right mr-6 tracking-wide">
-                                {language.dictionary.labelVersion}
-                            </dt>
-                            <dd>{key.version}</dd>
-                        </>
-                    )}
-                </dl>
-                <h2 className="my-4">{language.dictionary.labelOwner}</h2>
-                <dl>
-                    {key.artsapp_user && (
-                        <>
-                            <dt className="float-left w-32 font-bold text-right mr-6 tracking-wide">
-                                {language.dictionary.labelCreatedBy}
-                            </dt>
-                            <dd>{key.artsapp_user.name}</dd>
-                        </>
-                    )}
-                    {key.workgroup && key.workgroup.name && (
-                        <>
-                            <dt className="float-left w-32 font-bold text-right mr-6 tracking-wide">
-                                {language.dictionary.labelWorkgroup}
-                                :
-                            </dt>
-                            <dd>{key.workgroup.name}</dd>
-                        </>
-                    )}
-                    {key.workgroup && key.workgroup.organization
-                        && key.workgroup.organization.organization_info && (
-                            <>
-                                <dt className="float-left w-32 font-bold text-right mr-6 tracking-wide">
-                                    {language.dictionary.labelOrganization}
-                                </dt>
-                                <dd>{key.workgroup.organization.organization_info.fullName}</dd>
-                            </>
-                        )}
-                </dl>
+                <KeyInfoList keyInfo={key} />
             </div>
         );
     };

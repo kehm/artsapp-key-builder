@@ -1,11 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
 import Dialog from '@material-ui/core/Dialog';
-import PostAdd from '@material-ui/icons/PostAdd';
-import SaveOutlined from '@material-ui/icons/SaveOutlined';
-import DeleteOutlined from '@material-ui/icons/DeleteOutlined';
-import IconButton from '@material-ui/core/IconButton';
-import Button from '@material-ui/core/Button';
-import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import LanguageContext from '../../context/LanguageContext';
@@ -16,6 +10,7 @@ import { deleteWorkgroup } from '../../utils/api/delete';
 import CloseButton from '../components/buttons/CloseButton';
 import getInputChange from '../../utils/input-change';
 import TextInput from '../components/inputs/TextInput';
+import DialogButtons from '../components/buttons/DialogButtons';
 
 /**
  * Render create workgroup dialog
@@ -85,47 +80,6 @@ const CreateWorkgroup = ({
         }
     };
 
-    /**
-     * Render dialog actions
-     *
-     * @returns JSX
-     */
-    const renderActions = () => (
-        <DialogActions>
-            {workgroup ? (
-                <>
-                    <IconButton
-                        edge="start"
-                        aria-label="delete"
-                        onClick={() => handleDelete(true)}
-                    >
-                        <DeleteOutlined />
-                    </IconButton>
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        size="large"
-                        endIcon={<SaveOutlined />}
-                        type="submit"
-                    >
-                        {language.dictionary.btnSaveChanges}
-                    </Button>
-                </>
-            )
-                : (
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        size="large"
-                        endIcon={<PostAdd />}
-                        type="submit"
-                    >
-                        {language.dictionary.btnCreate}
-                    </Button>
-                )}
-        </DialogActions>
-    );
-
     return (
         <Dialog
             onClose={() => onClose(
@@ -159,7 +113,11 @@ const CreateWorkgroup = ({
                     />
                     {error && <p className="text-red-600 mb-4">{error}</p>}
                 </DialogContent>
-                {renderActions()}
+                <DialogButtons
+                    exists={workgroup}
+                    isForm
+                    onDelete={() => handleDelete(true)}
+                />
             </form>
             <ConfirmDelete
                 openDialog={confirmDelete}

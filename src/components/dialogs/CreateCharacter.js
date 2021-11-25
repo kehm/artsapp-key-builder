@@ -1,12 +1,7 @@
 import React, {
     useContext, useEffect, useState, useRef,
 } from 'react';
-import NavigateNext from '@material-ui/icons/NavigateNext';
-import DeleteOutlined from '@material-ui/icons/DeleteOutlined';
-import IconButton from '@material-ui/core/IconButton';
-import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import LanguageContext from '../../context/LanguageContext';
@@ -20,10 +15,11 @@ import { convertEditorToHtml, getCategoricalCharacterInfoValues, getNumericalCha
 import getInputChange from '../../utils/input-change';
 import { handleUpdateRevisionMedia } from '../../utils/media';
 import ProgressIndicator from '../components/ProgressIndicator';
-import LanguageBar from '../components/LanguageBar';
 import CreateState from './CreateState';
 import { isValid } from '../../utils/character';
 import InfoInputs from '../components/inputs/InfoInputs';
+import LanguageBar from '../components/LanguageBar';
+import DialogButtons from '../components/buttons/DialogButtons';
 
 /**
  * Render create character dialog
@@ -285,9 +281,11 @@ const CreateCharacter = ({
             <p className="mb-8">{language.dictionary.changeLanguages}</p>
             <LanguageBar
                 tab={tab}
+                showNo
+                showEn
                 requireNo={languages.langNo}
                 requireEn={languages.langEn}
-                onTabChange={(val) => setTab(val)}
+                onChangeTab={(val) => setTab(val)}
             />
             <InfoInputs
                 names={['titleNo', 'titleEn']}
@@ -302,26 +300,12 @@ const CreateCharacter = ({
                 })}
             />
             {error && <p className="text-red-600 mb-4">{error}</p>}
-            <DialogActions>
-                {id && (
-                    <IconButton
-                        edge="start"
-                        aria-label="delete"
-                        onClick={() => handleDelete(true)}
-                    >
-                        <DeleteOutlined />
-                    </IconButton>
-                )}
-                <Button
-                    variant="contained"
-                    color="secondary"
-                    size="large"
-                    endIcon={<NavigateNext />}
-                    onClick={() => handleNext()}
-                >
-                    {language.dictionary.btnNext}
-                </Button>
-            </DialogActions>
+            <DialogButtons
+                exists={id}
+                showNext
+                onNext={() => handleNext()}
+                onDelete={() => handleDelete(true)}
+            />
         </form>
     );
 

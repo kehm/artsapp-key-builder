@@ -101,7 +101,11 @@ const Groups = ({ onSetTitle }) => {
      * @returns JSX
      */
     const renderBar = () => (
-        <AppBar position="relative" className="my-6" color="default">
+        <AppBar
+            position="relative"
+            className="my-6"
+            color="default"
+        >
             <Tabs
                 value={tab}
                 onChange={(e, val) => setTab(val)}

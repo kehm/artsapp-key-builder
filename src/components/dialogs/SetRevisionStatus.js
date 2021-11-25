@@ -1,10 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import SaveOutlined from '@material-ui/icons/SaveOutlined';
 import Button from '@material-ui/core/Button';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
 import Dialog from '@material-ui/core/Dialog';
 import Close from '@material-ui/icons/Close';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -14,8 +10,7 @@ import LanguageContext from '../../context/LanguageContext';
 import CloseButton from '../components/buttons/CloseButton';
 import { updateRevisionStatus } from '../../utils/api/update';
 import getInputChange from '../../utils/input-change';
-import UserContext from '../../context/UserContext';
-import isPermitted from '../../utils/is-permitted';
+import StatusSelect from '../components/inputs/StatusSelect';
 
 /**
  * Render set revision status dialog
@@ -24,17 +19,11 @@ const SetRevisionStatus = ({
     openDialog, currentStatus, revision, onClose, onUpdated,
 }) => {
     const { language } = useContext(LanguageContext);
-    const { user } = useContext(UserContext);
     const defaultFormValues = {
         status: '',
     };
     const [formValues, setFormValues] = useState(defaultFormValues);
     const [error, setError] = useState(undefined);
-    const status = [
-        { value: 'DRAFT', label: language.dictionary.statusDraft },
-        { value: 'REVIEW', label: language.dictionary.statusReview },
-        { value: 'ACCEPTED', label: language.dictionary.statusAccepted },
-    ];
 
     /**
      * Set current status
@@ -68,39 +57,20 @@ const SetRevisionStatus = ({
 
     return (
         <Dialog onClose={() => onClose()} open={openDialog}>
-            <form className="p-2" autoComplete="off" onSubmit={handleSubmit}>
+            <form
+                className="p-2"
+                autoComplete="off"
+                onSubmit={handleSubmit}
+            >
                 <DialogTitle>{language.dictionary.headerChangeStatus}</DialogTitle>
                 <DialogContent>
                     <CloseButton onClick={() => onClose()} />
                     <p className="mb-8">{language.dictionary.sectionChangeStatus}</p>
-                    <FormControl variant="outlined" fullWidth>
-                        <InputLabel id="status-label" required>
-                            {language.dictionary.labelStatus}
-                        </InputLabel>
-                        <Select
-                            className="mb-8"
-                            labelId="status-label"
-                            id="status"
-                            name="status"
-                            value={formValues.status}
-                            variant="outlined"
-                            required
-                            label={language.dictionary.labelStatus}
-                            fullWidth
-                            onChange={(e) => setFormValues(getInputChange(e, formValues))}
-                        >
-                            {status.map((element) => (
-                                <MenuItem
-                                    key={element.value}
-                                    value={element.value}
-                                    disabled={!isPermitted(user, ['PUBLISH_KEY'])
-                                        && (element.value === 'ACCEPTED' || currentStatus === 'ACCEPTED')}
-                                >
-                                    {element.label}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
+                    <StatusSelect
+                        status={formValues.status}
+                        currentStatus={currentStatus}
+                        onChange={(e) => setFormValues(getInputChange(e, formValues))}
+                    />
                     {formValues.status !== 'DRAFT' && formValues.status !== currentStatus
                         && <p className="mb-8">{language.dictionary.returnAfterStatus}</p>}
                     {error && <p className="text-red-600 mb-4">{error}</p>}

@@ -1,9 +1,5 @@
 import React, { useContext, useState } from 'react';
 import NavigateBefore from '@material-ui/icons/NavigateBefore';
-import PostAdd from '@material-ui/icons/PostAdd';
-import SaveOutlined from '@material-ui/icons/SaveOutlined';
-import DeleteOutlined from '@material-ui/icons/DeleteOutlined';
-import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
@@ -13,9 +9,10 @@ import MenuItem from '@material-ui/core/MenuItem';
 import DialogActions from '@material-ui/core/DialogActions';
 import LanguageContext from '../../context/LanguageContext';
 import TextInput from '../components/inputs/TextInput';
-import LanguageBar from '../components/LanguageBar';
 import { createCharacterState } from '../../utils/api/create';
 import StateTable from '../components/tables/StateTable';
+import LanguageBar from '../components/LanguageBar';
+import DialogButtons from '../components/buttons/DialogButtons';
 
 /**
  * Render create character state dialog
@@ -214,23 +211,13 @@ const CreateState = ({
                     {language.dictionary.btnPrev}
                 </Button>
             </span>
-            {id && (
-                <IconButton edge="start" aria-label="delete" onClick={() => onDeleteCharacter()}>
-                    <DeleteOutlined />
-                </IconButton>
-            )}
-            <Button
-                variant="contained"
-                color="secondary"
-                size="large"
-                endIcon={id ? <SaveOutlined /> : <PostAdd />}
-                type="button"
-                onClick={() => onSubmit()}
-                disabled={formValues.type === ''
+            <DialogButtons
+                exists={id}
+                disableSave={formValues.type === ''
                     || (formValues.type === 'CATEGORICAL' && formValues.alternatives.length < 2)}
-            >
-                {id ? language.dictionary.btnSaveChanges : language.dictionary.btnAdd}
-            </Button>
+                onDelete={() => onDeleteCharacter()}
+                onSubmit={() => onSubmit()}
+            />
         </DialogActions>
     );
 
@@ -240,9 +227,11 @@ const CreateState = ({
             {formValues.type && (
                 <LanguageBar
                     tab={tab}
+                    showNo
+                    showEn
                     requireNo={languages.langNo}
                     requireEn={languages.langEn}
-                    onTabChange={(val) => setTab(val)}
+                    onChangeTab={(val) => setTab(val)}
                 />
             )}
             {formValues.type === 'CATEGORICAL' && (

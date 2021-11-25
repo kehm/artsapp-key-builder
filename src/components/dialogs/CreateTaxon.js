@@ -2,13 +2,7 @@ import React, {
     useCallback, useContext, useEffect, useRef, useState,
 } from 'react';
 import debounce from 'lodash/debounce';
-import PostAdd from '@material-ui/icons/PostAdd';
-import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
-import SaveOutlined from '@material-ui/icons/SaveOutlined';
-import DeleteOutlined from '@material-ui/icons/DeleteOutlined';
-import IconButton from '@material-ui/core/IconButton';
-import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
@@ -28,8 +22,9 @@ import TextInput from '../components/inputs/TextInput';
 import getInputChange from '../../utils/input-change';
 import { handleUpdateRevisionMedia } from '../../utils/media';
 import ProgressIndicator from '../components/ProgressIndicator';
-import LanguageBar from '../components/LanguageBar';
 import InfoInputs from '../components/inputs/InfoInputs';
+import LanguageBar from '../components/LanguageBar';
+import DialogButtons from '../components/buttons/DialogButtons';
 
 /**
  * Render create taxon dialog
@@ -236,34 +231,6 @@ const CreateTaxon = ({
     );
 
     /**
-     * Render dialog action buttons
-     *
-     * @returns JSX
-     */
-    const renderActions = () => (
-        <DialogActions>
-            {id && (
-                <IconButton
-                    edge="start"
-                    aria-label="delete"
-                    onClick={() => handleDelete(true)}
-                >
-                    <DeleteOutlined />
-                </IconButton>
-            )}
-            <Button
-                variant="contained"
-                color="secondary"
-                size="large"
-                endIcon={id ? <SaveOutlined /> : <PostAdd />}
-                type="submit"
-            >
-                {id ? language.dictionary.btnSaveChanges : language.dictionary.btnAdd}
-            </Button>
-        </DialogActions>
-    );
-
-    /**
      * Render dialogs
      *
      * @returns JSX
@@ -336,9 +303,11 @@ const CreateTaxon = ({
             <p className="mb-8">{language.dictionary.changeLanguages}</p>
             <LanguageBar
                 tab={tab}
+                showNo
+                showEn
                 requireNo={languages.langNo}
                 requireEn={languages.langEn}
-                onTabChange={(val) => setTab(val)}
+                onChangeTab={(val) => setTab(val)}
             />
             <InfoInputs
                 names={['vernacularNameNo', 'vernacularNameEn']}
@@ -378,7 +347,11 @@ const CreateTaxon = ({
                     {renderInputs()}
                     {error && <p className="text-red-600 mb-4">{error}</p>}
                 </DialogContent>
-                {renderActions()}
+                <DialogButtons
+                    exists={id}
+                    isForm
+                    onDelete={() => handleDelete(true)}
+                />
                 <ConfirmDelete
                     openDialog={confirmDelete}
                     onClose={() => setConfirmDelete(false)}

@@ -14,10 +14,10 @@ import Chip from '@material-ui/core/Chip';
 import Slider from '@material-ui/core/Slider';
 import Typography from '@material-ui/core/Typography';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import DeleteOutlined from '@material-ui/icons/DeleteOutlined';
 import LanguageContext from '../../../context/LanguageContext';
 import ConfirmDelete from '../../dialogs/ConfirmDelete';
 import { findName } from '../../../utils/translation';
+import DeleteButton from '../buttons/DeleteButton';
 
 /**
  * Render logical premises table
@@ -294,14 +294,10 @@ const PremiseTable = ({
                             label={char && !Array.isArray(char.states) ? '' : language.dictionary.operatorNot}
                         />
                         <span className="absolute right-2">
-                            <IconButton
+                            <DeleteButton
                                 disabled={premises.length < 2}
-                                edge="end"
-                                aria-label="delete"
                                 onClick={() => handleRemovePremise(index, true)}
-                            >
-                                <DeleteOutlined />
-                            </IconButton>
+                            />
                         </span>
                     </div>
                     <Autocomplete

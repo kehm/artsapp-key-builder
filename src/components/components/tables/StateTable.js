@@ -7,12 +7,12 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Add from '@material-ui/icons/Add';
-import DeleteOutlined from '@material-ui/icons/DeleteOutlined';
 import LanguageContext from '../../../context/LanguageContext';
 import FileDrop from '../inputs/FileDrop';
 import SetMediaInfo from '../../dialogs/SetMediaInfo';
 import UnsavedChanges from '../../dialogs/UnsavedChanges';
 import TextInput from '../inputs/TextInput';
+import DeleteButton from '../buttons/DeleteButton';
 
 /**
  * Render state table
@@ -212,13 +212,7 @@ const StateTable = ({
                             <TableRow key={index}>
                                 <TableCell component="th" scope="row">
                                     <span className="absolute right-10">
-                                        <IconButton
-                                            edge="end"
-                                            aria-label="delete"
-                                            onClick={() => onDeleteItem(state)}
-                                        >
-                                            <DeleteOutlined />
-                                        </IconButton>
+                                        <DeleteButton onClick={() => onDeleteItem(state)} />
                                     </span>
                                     {renderTextInputs(state, index)}
                                     {renderFileDrop(state)}
